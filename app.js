@@ -67,7 +67,7 @@ async function svg2() {
     const yScale = d3.scaleLog().domain([10, 150]).range([height, 0]);
 
     const data = await d3.csv("https://flunky.github.io/cars2017.csv");
-    console.log(data);
+    //console.log(data);
 
     container = d3.select(".svg-container").append("svg").classed("sv2", true);
 
@@ -113,23 +113,116 @@ async function svg2() {
 }
 
 async function svg3() {
-    const data = await d3.csv("us_world_gdp_spending.csv");
+    // Read in data
+    const data = await d3.csv("us_world_gdp_spending.csv", function (d) {
+        return {
+            Country: d["Country.Name"],
+            Year: d3.timeParse("%Y")(d.Year),
+            PercGDP: d.PercGDP,
+        };
+    });
 
-    const width = 500;
+    us_data = data.filter(function (d) {
+        return d.Country == "United States";
+    });
+
+    world_data = data.filter(function (d) {
+        return d.Country == "World";
+    });
+
+    console.log(data);
+
+    // Set the dimensions of the SVG
+    const width = 800;
     const height = 500;
     const margin = 50;
 
-    const xScale = d3
-        .scaleBand()
-        .domain(data.map((dataPoint) => dataPoint.Year))
-        .rangeRound([0, 500])
-        .padding(0.1); //.padding(0.1) // scaleBand = Ordinal scale (non-continuous)
+    // Find the maximum percGDP and Year for scales
+    let maxGDP = d3.max(data, function (d) {
+        return +d.PercGDP;
+    });
+    let maxYear = d3.max(data, function (d) {
+        return +d.Year;
+    });
 
-    const yScale = d3.scaleLinear().domain([10, 150]).range([height, 0]);
+    // Define X scale
+    let x = d3
+        .scaleTime()
+        .domain(
+            d3.extent(data, function (d) {
+                return d.Year;
+            })
+        )
+        .range([0, width]);
+
+    const y = d3
+        .scaleLinear()
+        .domain([0, maxGDP + 1])
+        .range([height, 0]);
+
+    // Specify the div to fill with the chart
+    let container = d3
+        .select(".svg-container")
+        .append("svg")
+        .classed("sv3", true);
+
+    // Add the width and height to the svg and add a g
+    let svg = container
+        .attr("width", width + 2 * margin)
+        .attr("height", height + 2 * margin)
+        .append("g")
+        .attr("transform", "translate(" + margin + "," + margin + ")");
+
+    // Add the X and Y axis
+    // The y-axis
+    svg.append("g").call(d3.axisLeft(y));
+
+    // The x-axis
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+    console.log();
+
+    // Add the line for US data
+    svg.append("path")
+        .datum(us_data)
+        .attr("fill", "none")
+        .attr("stroke", "red")
+        .attr("stroke-width", 1.5)
+        .attr(
+            "d",
+            d3
+                .line()
+                .x(function (d) {
+                    return x(d.Year);
+                })
+                .y(function (d) {
+                    return y(d.PercGDP);
+                })
+        );
+
+    // Add the line for World data
+    svg.append("path")
+        .datum(world_data)
+        .attr("fill", "none")
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 1.5)
+        .attr(
+            "d",
+            d3
+                .line()
+                .x(function (d) {
+                    return x(d.Year);
+                })
+                .y(function (d) {
+                    return y(d.PercGDP);
+                })
+        );
 }
 
 async function main() {
-    svg1();
-    svg2();
+    //svg1();
+    //svg2();
     svg3();
 }

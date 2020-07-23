@@ -15,7 +15,7 @@
             integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
             crossorigin="anonymous"
         />
-        <title>Narrative Visualization</title>
+        <title>US Defence Spending per GDP</title>
         <script src="https://d3js.org/d3.v5.min.js"></script>
         <script src="app.js" defer></script>
         <link rel="stylesheet" href="styles.css" />
@@ -23,14 +23,20 @@
     <body onload="main()">
         <div id="root">
             <div class="App">
-                <header class="App-header">Narrative Visualization</header>
-
+                <header class="App-header">
+                    US Defence Spending per GDP from 1970 to 2018
+                </header>
+                <hr />
                 <div class="App-body">
                     <h5>
                         This visualization is about how US government spending
                         has changed over the course of 30 years.
                     </h5>
-                    <p>After certain incidents, the defense spending has changed. Does the defence spending change based on the incumbent party?</p>
+                    <p>
+                        After certain incidents, the defense spending has
+                        changed. Does the defence spending change based on the
+                        incumbent party?
+                    </p>
                     <div class="svg-container"></div>
                 </div>
             </div>
