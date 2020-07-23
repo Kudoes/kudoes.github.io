@@ -113,9 +113,7 @@ async function svg2() {
 }
 
 async function svg3() {
-    const data = await d3.csv(
-        "https://github.com/Kudoes/US_Defence_Spending_Visualization/blob/master/data/us_world_gdp_spending.csv"
-    );
+    const data = await d3.csv("us_world_gdp_spending.csv");
 
     const width = 500;
     const height = 500;
