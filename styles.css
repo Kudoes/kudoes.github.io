@@ -1,0 +1,32 @@
+.App {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.App-header {
+    background-color: white;
+    min-height: 15vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 4vmin);
+    color: black;
+}
+
+.App-body {
+    background-color: #ffffff;
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(4px + 1vmin);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.svg-container {
+    border: 0px solid black;
+}
