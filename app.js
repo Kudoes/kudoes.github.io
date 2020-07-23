@@ -219,6 +219,81 @@ async function svg3() {
                     return y(d.PercGDP);
                 })
         );
+
+    const tooltip = svg.append("g");
+
+    var focus = svg
+        .append("g")
+        .append("circle")
+        .style("fill", "none")
+        .attr("stroke", "black")
+        .attr("r", 8.5)
+        .style("opacity", 0);
+
+    // Create the text that travels along the curve of chart
+    var focusText = svg
+        .append("g")
+        .append("text")
+        .style("opacity", 0)
+        .attr("text-anchor", "left")
+        .attr("alignment-baseline", "middle");
+
+    svg.append("rect")
+        .style("fill", "none")
+        .style("pointer-events", "all")
+        .attr("width", width)
+        .attr("height", height)
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseout", mouseout);
+
+    function mouseover() {
+        focus.style("opacity", 1);
+        focusText.style("opacity", 1);
+    }
+
+    function mousemove() {
+        let bisect = d3.bisector(function (d) {
+            return x(d.Year);
+        }).left;
+
+        var x0 = x(x.invert(d3.mouse(this)[0]));
+        console.log(x0);
+
+        let i = bisect(data, x0, 1);
+        console.log(i);
+
+        selectedData = data[i];
+        console.log(selectedData);
+
+        focus
+            .attr("cx", x(selectedData.Year))
+            .attr("cy", y(selectedData.PercGDP));
+        focusText
+            .html(
+                "Year:" +
+                    selectedData.Year.getFullYear() +
+                    "  -  " +
+                    "% GDP:" +
+                    parseFloat(selectedData.PercGDP).toFixed(2)
+            )
+            .attr("x", x(selectedData.Year) + 15)
+            .attr("y", y(selectedData.PercGDP));
+
+        // const { year, pct_gdp } = d3.bisector(d3.mouse(this)[0]);
+        // console.log(pct_gdp);
+
+        // tooltip
+        //     .attr("transform", `translate(${x(year)},${y(pct_gdp)})`)
+        //     .call(callout, `${pct_gdp}${year}`);
+    }
+
+    function mouseout() {
+        focus.style("opacity", 0);
+        focusText.style("opacity", 0);
+    }
+
+    //svg.on("touchend mouseleave", () => tooltip.call(callout, null));
 }
 
 async function main() {
