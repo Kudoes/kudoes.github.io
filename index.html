@@ -7,15 +7,9 @@
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
+        <title>US Defense Spending</title>
 
-        <!-- Bootstrap CSS -->
-        <link
-            rel="stylesheet"
-            href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-            crossorigin="anonymous"
-        />
-        <title>US Defence Spending per GDP</title>
+        <!-- Load d3.js -->
         <script src="https://d3js.org/d3.v5.min.js"></script>
         <script src="app.js" defer></script>
         <link rel="stylesheet" href="styles.css" />
@@ -23,41 +17,50 @@
     <body onload="main()">
         <div id="root">
             <div class="App">
-                <header class="App-header">
-                    US Defence Spending per GDP from 1970 to 2018
-                </header>
-                <hr />
+                <div class="App-header">
+                    <header class="App-header-title">
+                        US Defense Spending
+                    </header>
+                    <div class="btn-container">
+                        <button id="1" onclick="handleClick(this, this.id)">
+                            1
+                        </button>
+                        <button id="2" onclick="handleClick(this, this.id)">
+                            2
+                        </button>
+                        <button id="3" onclick="handleClick(this, this.id)">
+                            3
+                        </button>
+                    </div>
+                </div>
+
                 <div class="App-body">
-                    <h5>
-                        This visualization is about how US government spending
-                        has changed over the course of 30 years.
-                    </h5>
-                    <p>
-                        After certain incidents, the defense spending has
-                        changed. Does the defence spending change based on the
-                        incumbent party?
-                    </p>
-                    <div class="svg-container"></div>
+                    <div>
+                        <div class="explanation">
+                            <h3>Hello</h3>
+                            <p class="para" id="explanation-text">
+                                After
+                            </p>
+                            <hr />
+                        </div>
+                        <div class="svg1-container">
+                            <h3 id="vis-title">
+                                United States Defence Spending vs. Rest of the
+                                World (2018)
+                            </h3>
+                            <svg
+                                class="main-svg"
+                                width="1000"
+                                height="500"
+                            ></svg>
+                        </div>
+                    </div>
+                    <footer class="footer-class">
+                        Designed by Kashif Khan. Final Project for CS 498 at
+                        UIUC.
+                    </footer>
                 </div>
             </div>
         </div>
-
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script
-            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-            crossorigin="anonymous"
-        ></script>
-        <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            crossorigin="anonymous"
-        ></script>
-        <script
-            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-            crossorigin="anonymous"
-        ></script>
     </body>
 </html>

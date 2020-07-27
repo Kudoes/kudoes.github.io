@@ -5,27 +5,8 @@
     height: 100vh;
 }
 
-html {
-    font-family: "Segoe UI";
-}
-
-body {
-    margin: 0px 0px 0px 0px;
-}
-
-button {
-    background-color: #e63946; /* Green */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-}
-
 .App-header {
-    background-color: #a8dadc;
+    background-color: white;
     min-height: 3vh;
     display: flex;
     flex-direction: column;
@@ -33,22 +14,16 @@ button {
     justify-content: center;
     font-size: 2.5rem;
     color: black;
-    padding: 1rem;
-    border-bottom: solid 0px black;
-}
-
-.btn-container {
-    padding: 0.5rem 0 0.5rem 0;
-    background-color: #a8dadc;
 }
 
 .App-body {
-    background-color: #f1faee;
+    background-color: white;
     flex-grow: 1;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: 14.5px;
+    padding-top: 0.5rem;
 }
 
 .svg-container {
@@ -121,15 +96,11 @@ hr {
 .footer-class {
     /* text-align: left; */
     padding-left: 1rem;
-    font-size: 13.5px;
-    height: 1rem; /* Footer height */
-    /* text-align: left; */
-    padding-left: 1rem;
-    font-size: 13.5px;
+    font-size: 14px;
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 0.1rem; /* Footer height */
+    height: 2.5rem; /* Footer height */
 }
 
 .vis-title {
