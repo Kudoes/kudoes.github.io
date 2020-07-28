@@ -58,9 +58,6 @@ button:hover {
     font-size: 14.5px;
 }
 
-#vis-title {
-    
-}
 
 .svg-container {
     border: 2px solid black;
@@ -112,7 +109,16 @@ hr {
     padding: 10px;
     text-align: left;
     opacity: 0;
-    border: 10px black;
+    border: solid 1px black;
+    position: absolute;
+}
+
+p {
+    margin-top: 0px;
+}
+
+.tooltip-para {
+    margin-bottom: 0px;
 }
 
 .tooltip-line-chart {
