@@ -231,17 +231,7 @@ async function create_gdp_line_chart() {
             tooltip.style("display", "block");
             tooltip.transition().duration(250).style("opacity", 2);
         })
-        .on("mouseout", function (d) {
-            d3.select(this).transition().attr("r", 4);
-            // Hide tooltip on mouse exit from slice
-            tooltip.style("display", "none");
-            tooltip.style("opacity", 0);
-        })
-        .on("mousemove", function (d) {
-            tooltip
-                .style("top", d3.event.layerY + 20 + "px")
-                .style("left", d3.event.layerX + "px");
-        });
+
 
     let lines = svg
         .selectAll(".line-point")

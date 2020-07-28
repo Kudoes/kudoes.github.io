@@ -6,22 +6,30 @@
 }
 
 html {
-    font-family: "Segoe UI";
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
 }
 
 body {
     margin: 0px 0px 0px 0px;
+    background-color: #f1faee;
 }
 
 button {
     background-color: #e63946; /* Green */
     border: none;
     color: white;
-    padding: 15px 32px;
+    padding: 10px 25px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    border: solid 2px #e63946;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #e02030; /* Green */
+    border-color: white;
 }
 
 .App-header {
@@ -34,7 +42,7 @@ button {
     font-size: 2.5rem;
     color: black;
     padding: 1rem;
-    border-bottom: solid 0px black;
+    border-bottom: solid 1px black;
 }
 
 .btn-container {
@@ -43,12 +51,15 @@ button {
 }
 
 .App-body {
-    background-color: #f1faee;
     flex-grow: 1;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: 14.5px;
+}
+
+#vis-title {
+    
 }
 
 .svg-container {
@@ -74,14 +85,15 @@ button {
 }
 
 .para {
-    height: 70%;
+    height: 60%;
+    text-align: left;
 }
 
 hr {
     border: 0;
     clear: both;
     display: block;
-    width: 75%;
+    width: 100%;
     background-color: black;
     height: 1px;
 }
@@ -119,22 +131,11 @@ hr {
 }
 
 .footer-class {
-    /* text-align: left; */
     padding-left: 1rem;
     font-size: 13.5px;
-    height: 1rem; /* Footer height */
-    /* text-align: left; */
-    padding-left: 1rem;
-    font-size: 13.5px;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 0.1rem; /* Footer height */
 }
 
-.vis-title {
-    margin-bottom: 0rem;
-}
+
 
 .axis-title {
     font-size: 11px;
