@@ -5,6 +5,8 @@ let slide = 1;
 let data1 = {};
 let data2 = {};
 
+let data_dict = {};
+
 async function main() {
     //create_pie_chart_svg();
     create_gdp_line_chart();
@@ -15,29 +17,149 @@ function handleClick(event, id) {
 
     if (id == "1") {
         if (slide != "1") {
-            slide = "1";
-            let textNode =
+            slide = parseInt(id);
+            document.getElementById("vis-title").textContent =
                 "United States Defence Spending vs. Rest of the World (2018)";
-            document.getElementById("vis-title").textContent = textNode;
 
             create_pie_chart_svg();
         }
     } else if (id == "2") {
         if (slide != "2") {
-            slide = "2";
-            let textNode =
+            slide = parseInt(id);
+
+            document.getElementById("explanation-title").innerHTML =
+                "Historical Trends in US Defence Spending as % of GDP";
+
+            document.getElementById("vis-title").textContent =
                 "United States Defence Spending as % of GDP (1960 - 2018)";
-            document.getElementById("vis-title").textContent = textNode;
 
             let bodyText =
-                "Clearly, the overall defence budget as a percentage of GDP has been decreasing since 1960. However, there are some periods of dramatic increase.\n\nWe are going to analyze <b>four</b> key time periods of particular interest to understand how events unfolding at the time affected the US defence budget.";
+                "Overall defence budget as a percentage of GDP has been decreasing since 1960. However, notice how there are some periods of dramatic increase/decrease." +
+                " We are going to analyze <b>four</b> key time periods of particular interest to understand how events unfolding at the time affected the US defence budget.";
             document.getElementById("explanation-text").innerHTML = bodyText;
 
             destroy_pie_chart();
             create_gdp_line_chart();
         }
     } else if (id == "3") {
-        toggleData();
+        if (slide != "3") {
+            slide = parseInt(id);
+
+            // Title of Plot
+            document.getElementById("vis-title").textContent =
+                "United States Defence Spending as % of GDP (1960 - 2018)";
+
+            // Paragraph Title
+            document.getElementById("explanation-title").innerHTML =
+                "Entering the Vietnam War";
+
+            // Paragraph Text
+            let bodyText =
+                "In 1965, the US increased their involvement in the Vietnam war. In 1965, President Lyndon B. Johnson orders a three-year bombing campaign (Operation Rolling Thunder) " +
+                "in Northern Vietnam and sends combat troops to Vietnam for the first time. This escalation is reflected in the plot, where defense spending increases dramatically over " +
+                "the next two years until it reaches 9.06% of the GDP in 1967.";
+            document.getElementById("explanation-text").innerHTML = bodyText;
+            gdp_chart_transition_1();
+        }
+    } else if (id == "next" && slide == 3) {
+        slide += 1;
+        if (slide == 4) {
+            // Title of Plot
+            document.getElementById("vis-title").textContent =
+                "United States Defence Spending as % of GDP (1960 - 2018)";
+
+            // Paragraph Title
+            document.getElementById("explanation-title").innerHTML =
+                "President Nixon Gradually Decreasing Involvement in Vietnam and the End of Official Involvement";
+
+            // Paragraph Text
+            let bodyText =
+                "In 1969, Richard Nixon won the presidential election. At this point, the war was very unpopular with the general US public and President Nixon sought to wind down US involvement. " +
+                "He did so over the next few years until the Paris Peace Accords were signed in 1973 and direct US involvement in the Vietnam War ended. The impact of these events on US defense spending" +
+                " can be seen in the years from 1967 approximately all the way up to 1980.";
+            document.getElementById("explanation-text").innerHTML = bodyText;
+        }
+    } else if (id == "next" && slide == 4) {
+        slide += 1;
+        if (slide == 5) {
+            // Title of Plot
+            document.getElementById("vis-title").textContent =
+                "United States Defence Spending as % of GDP (1960 - 2018)";
+
+            // Paragraph Title
+            document.getElementById("explanation-title").innerHTML =
+                "President Reagan's Defense Buildup and the Cold War";
+
+            // Paragraph Text
+            let bodyText =
+                "When Ronald Reagan won the presidency in 1980, he had a very different approach towards the defense budget than his predecessors. His policies heavily emphasized the importance of building up" +
+                " and improving US military capabilities to win the Cold War. This included purchasing more military equipment, increasing R&D budgets for developing new military technology, and military salary increases." +
+                " As a result of these policies, the % of GDP allocated to defense increased drastically under his presidency, particularly during his first term. Interestingly, " +
+                "military expenditure did begin to see a downward trend during President Reagan's second term in office.";
+
+            // Talk in annotations about how he did begin reducing his military spending over his second term
+            // Also discuss potentially how the cold war effected this spending
+            document.getElementById("explanation-text").innerHTML = bodyText;
+        }
+    } else if (id == "next" && slide == 5) {
+        slide += 1;
+        if (slide == 6) {
+            // Title of Plot
+            document.getElementById("vis-title").textContent =
+                "United States Defence Spending as % of GDP (1960 - 2018)";
+
+            // Paragraph Title
+            document.getElementById("explanation-title").innerHTML =
+                "Post-Cold War Budget Cuts";
+
+            // Paragraph Text
+            let bodyText =
+                "After the fall of the Soviet Union in 1991 and subsequent end of the Cold War, there was seemingly no longer a need for such heavy investment in defense. Beginning with President George H. Bush and lasting" +
+                " with President Clinton until 2001, The driving force behind this reduced spending was the fall of the Soviet Union and an increased emphasis on balancing the budget. President Clinton's policies involved " +
+                " reducing federal spending dramatically over his two terms as president. As a result, defense spending fell dramatically during the 1990s.";
+
+            // defense spending fell almost year-on-year to a 68-year low of 2.91% of the GDP in 1999 - annotate
+            document.getElementById("explanation-text").innerHTML = bodyText;
+        }
+    } else if (id == "next" && slide == 6) {
+        slide += 1;
+        if (slide == 7) {
+            // Title of Plot
+            document.getElementById("vis-title").textContent =
+                "United States Defence Spending as % of GDP (1960 - 2018)";
+
+            // Paragraph Title
+            document.getElementById("explanation-title").innerHTML =
+                "9/11: Wars in Iraq and Afghanistan";
+
+            // Paragraph Text
+            let bodyText =
+                "After the 9/11 attacks, President Bush launched his 'War on Terror' that began the Afghanistan and Iraq wars. Naturally, this resulted in" +
+                " dramatic increases in defense spending over the course of his presidency.";
+
+            // defense spending fell almost year-on-year to a 68-year low of 2.91% of the GDP in 1999 - annotate
+            document.getElementById("explanation-text").innerHTML = bodyText;
+        }
+    } else if (id == "next" && slide == 7) {
+        slide += 1;
+        if (slide == 8) {
+            // Title of Plot
+            document.getElementById("vis-title").textContent =
+                "United States Defence Spending as % of GDP (1960 - 2018)";
+
+            // Paragraph Title
+            document.getElementById("explanation-title").innerHTML =
+                "2008 Recession and the End of the Iraq war under President Obama";
+
+            // Paragraph Text
+            let bodyText =
+                "Under President Obama's presidency the Iraq war ended in 2011 with the withdrawal of all US combat troops. Furthermore, As a result of the " +
+                "2008 recession, defense spending was one of the areas where spending was reduced. By the end of President Obama's tenure, defense spending as a %" +
+                " of GDP had reached Clinton-era levels - significantly reduced from Bush-era defense spending.";
+
+            // defense spending fell almost year-on-year to a 68-year low of 2.91% of the GDP in 1999 - annotate
+            document.getElementById("explanation-text").innerHTML = bodyText;
+        }
     }
 }
 
@@ -65,8 +187,8 @@ async function create_gdp_line_chart() {
         return elem.Year.getFullYear() < 2002;
     });
 
-    console.log(data1);
-    console.log(data2);
+    data_dict.world_gdp_data = world_data;
+    data_dict.us_gdp_data = us_data;
 
     // Set the dimensions of the SVG
     const width = 1000;
@@ -218,7 +340,13 @@ async function create_gdp_line_chart() {
             // Add Country header to Tooltip
             tooltip
                 .select(".country")
-                .html("<p class='tooltip-para'><b>" + d.Country + "<br>" + d.Year.getFullYear() + "</p><hr>")
+                .html(
+                    "<p class='tooltip-para'><b>" +
+                        d.Country +
+                        "<br>" +
+                        d.Year.getFullYear() +
+                        "</p><hr>"
+                )
                 .style("color", "black");
 
             // Add Spending for that Country to tooltip
@@ -248,6 +376,7 @@ async function create_gdp_line_chart() {
         .data(data2)
         .enter()
         .append("line")
+        .attr("class", "line-point")
         .attr("x1", (d) => x(d.Year))
         .attr("x2", (d) => x(d.Year))
         .attr("y1", (d) => y(d.PercGDP))
@@ -274,298 +403,37 @@ async function create_gdp_line_chart() {
     tooltip.append("div").attr("class", "spending");
 }
 
-async function create_gdp_line_chart2() {
-    const gdpSpending = await d3.csv("us_world_gdp_spending.csv", function (d) {
-        return {
-            Country: d["Country.Name"],
-            Year: d3.timeParse("%Y")(d.Year),
-            PercGDP: d.PercGDP,
-        };
+function gdp_chart_transition_1() {
+    // First, highlight the vietnam war years
+    const vietnam_war_data = data_dict.us_gdp_data.filter((d) => {
+        return ![1965, 1966, 1967].includes(d.Year.getFullYear());
+    });
+    console.log(vietnam_war_data);
+
+    let others = d3.selectAll(".point").filter(function (d) {
+        if (vietnam_war_data.includes(d)) {
+            return this;
+        }
     });
 
-    us_data = gdpSpending.filter(function (d) {
-        return d.Country == "United States";
+    let others2 = d3.selectAll(".line-point").filter(function (d) {
+        if (vietnam_war_data.includes(d)) {
+            return this;
+        }
     });
 
-    world_data = gdpSpending.filter(function (d) {
-        return d.Country == "World";
-    });
+    others.attr("opacity", 1).transition().duration(1000).attr("opacity", 0.3);
+    others2.attr("opacity", 1).transition().duration(1000).attr("opacity", 0.3);
 
-    const data = us_data;
+    // vietnam_war_data.forEach(function (d) {
+    //     d3.select(d).attr("opacity", 0);
+    // });
 
-    data2 = data;
-    data1 = data.filter((elem) => {
-        return elem.Year.getFullYear() < 2002;
-    });
+    // let current = this;
 
-    console.log(data1);
-    console.log(data2);
-
-    // Set the dimensions of the SVG
-    const width = 1000;
-    const height = 500;
-    const margin = 50;
-
-    // Find the maximum percGDP and Year for scales
-    let maxGDP = d3.max(data, function (d) {
-        return +d.PercGDP;
-    });
-    let maxYear = d3.max(data, function (d) {
-        return +d.Year;
-    });
-
-    // Define X scale
-    let x = d3
-        .scaleTime()
-        .domain(
-            d3.extent(data, function (d) {
-                return d.Year;
-            })
-        )
-        .range([0, width - 2 * margin]);
-
-    // Define Y scale
-    let y = d3
-        .scaleLinear()
-        .domain([0, Math.floor(maxGDP + 1)])
-        .range([height - 2 * margin, 0]);
-
-    // Define initial x scale for transition
-    let x2 = d3
-        .scaleTime()
-        .domain(
-            d3.extent(data, function (d) {
-                return d.Year;
-            })
-        )
-        .range([0, 0]);
-
-    // Define initial y scale for transition
-    let y2 = d3
-        .scaleLinear()
-        .domain([0, Math.floor(maxGDP + 1)])
-        .range([0, 0]);
-
-    // Add color scale
-    let colScale = d3
-        .scaleLinear()
-        .domain([0, Math.floor(maxGDP + 1)])
-        .range(["white", "#d21f3c"]);
-
-    // Add a "g" element to the svg
-    let svg = d3
-        .select(".main-svg")
-        .append("g")
-        .attr("transform", "translate(" + margin + "," + margin + ")");
-
-    // Add the X and Y axis
-    // The y-axis
-    let yAxis = d3
-        .select(".main-svg")
-        .append("g")
-        .attr("transform", "translate(" + margin + "," + margin + ")")
-        .call(d3.axisLeft(y2).ticks(0))
-        .transition()
-        .duration(1000)
-        .call(d3.axisLeft(y).ticks(0))
-        .transition()
-        .call(d3.axisLeft(y));
-
-    let translate = height - margin;
-    let xAxis = d3
-        .select(".main-svg")
-        .append("g")
-        .attr("transform", "translate(" + margin + "," + translate + ")")
-        .call(d3.axisBottom(x2).ticks(0))
-        .transition()
-        .duration(1000)
-        .call(d3.axisBottom(x).ticks(0))
-        .transition()
-        .call(d3.axisBottom(x).ticks(20));
-
-    svg.append("text")
-        .attr("text-anchor", "end")
-        .attr("class", "axis-title")
-        .attr(
-            "transform",
-            "translate(0" + "," + (height - height / 2) / 2 + ")rotate(-90)"
-        )
-        .attr("y", -75)
-        .attr("x", 0)
-        .transition()
-        .duration(1000)
-        .attr("y", -25)
-        .attr("x", 0)
-        .text("% of GDP Spent on Defense");
-
-    // Add X axis label:
-    svg.append("text")
-        .attr("text-anchor", "end")
-        .attr("class", "axis-title")
-        .attr("x", width / 2 - 25)
-        .attr("y", height)
-        .transition()
-        .duration(1000)
-        .attr("x", width / 2 - 25)
-        .attr("y", height - margin - 10)
-        .text("Year");
-
-    // Add points for US data
-    let points = svg
-        .selectAll(".point")
-        .data(data1)
-        .enter()
-        .append("circle")
-        .attr("class", "point")
-        .attr("fill", (d) => colScale(d.PercGDP));
-
-    points
-        .attr("r", 0)
-        .attr("cx", (d) => x(d.Year))
-        .attr("cy", (d) => y(0))
-        .transition()
-        .delay(1000)
-        .duration(1000)
-        .attr("r", 3)
-        .attr("cx", (d) => x(d.Year))
-        .attr("cy", (d) => y(d.PercGDP));
-
-    points
-        .on("mouseover", (a, b, c) => {})
-        .on("mouseout", (d) => {})
-        .on("mousemove", (d) => {});
-
-    let lines = svg
-        .selectAll(".line-point")
-        .data(data1)
-        .enter()
-        .append("line")
-        .attr("x1", (d) => x(d.Year))
-        .attr("x2", (d) => x(d.Year))
-        .attr("y1", (d) => y(d.PercGDP))
-        .attr("y2", (d) => y(d.PercGDP));
-
-    lines
-        .transition()
-        .delay(3000)
-        .duration(500)
-        .attr("y2", (d) => height - 2 * margin)
-        .style("stroke", (d) => colScale(d.PercGDP))
-        .attr("stroke-width", 1);
-    lines.on("mouseover", (d) => {
-        console.log(d);
-    });
-
-    /** To Change Dataset!
-     *     let u = svg.selectAll(".point").data(data2);
-    let points2 = svg
-        .selectAll(".point")
-        .data(data2)
-        .enter()
-        .append("circle")
-        .attr("class", "point")
-        .attr("cx", (d) => x(d.Year))
-        .attr("cy", (d) => y(0))
-        .transition()
-        .duration(1000)
-        .attr("cx", (d) => x(d.Year))
-        .attr("cy", (d) => y(d.PercGDP))
-        .attr("r", 3);
-     */
-
-    //data = [];
-    // let path = svg
-    //     .selectAll("path")
-    //     .data([
-    //         data.filter((d) => {
-    //             return d.Year.getFullYear() < 2002;
-    //         }),
-    //     ])
-    //     .enter()
-    //     .append("path")
-    //     .attr("class", "year-point")
-    //     .attr("fill", "none")
-    //     .attr("stroke", "dodgerblue")
-    //     .attr("stroke-width", 1.5)
-    //     .attr(
-    //         "d",
-    //         d3
-    //             .line()
-    //             .x((d) => 0)
-    //             .y((d) => 0)
-    //     )
-    //     .transition()
-    //     .duration(2000)
-    //     .attr(
-    //         "d",
-    //         d3
-    //             .line()
-    //             .x((d) => x(d.Year))
-    //             .y((d) => y(d.PercGDP))
-    //     );
-
-    // var n = svg
-    //     .selectAll(".year-point")
-    //     .data(data)
-    //     .enter()
-    //     .append("path")
-    //     .attr("class", "year-point")
-    //     .attr("fill", "none")
-    //     .attr("stroke", "dodgerblue")
-    //     .attr("stroke-width", 1.5)
-    //     .attr(
-    //         "d",
-    //         d3
-    //             .line()
-    //             .x((d) => x(d.Year))
-    //             .y((d) => y(d.PercGDP))
-    //     );
-
-    //path.on("mouseover", (d, i) => {
-    //console.log(d);
-    //console.log(i);
-    //});
-
-    // svg.append("text")
-    //     .attr("text-anchor", "end")
-    //     .attr(
-    //         "transform",
-    //         "translate(" +
-    //             5 / 2 +
-    //             "," +
-    //             (height - height / 2) / 2 +
-    //             ")rotate(-90)"
-    //     )
-    //     .attr("y", -margin + 10)
-    //     .attr("x", -margin + 20)
-    //     .text("% of GDP Spent on Defense");
-
-    // // Add X axis label:
-    // svg.append("text")
-    //     .attr("text-anchor", "end")
-    //     .attr("x", width - 500)
-    //     .attr("y", height + margin / 2 + 20)
-    //     .text("Year");
-
-    // Add the line for World data
-    // svg.append("path")
-    //     .datum(world_data)
-    //     .attr("fill", "none")
-    //     .attr("stroke", "steelblue")
-    //     .attr("stroke-width", 1.5)
-    //     .attr(
-    //         "d",
-    //         d3
-    //             .line()
-    //             .x(function (d) {
-    //                 return x(d.Year);
-    //             })
-    //             .y(function (d) {
-    //                 return y(d.PercGDP);
-    //             })
-    //     );
-
-    //handleHover(svg, width, height, x, y, data);
+    // let others = d3.selectAll(".point").filter(function (d) {
+    //     return current != this;
+    // });
 }
 
 function toggleData() {
@@ -945,4 +813,299 @@ function destroy_line_chart() {
     d3.transition().delay(2000).selectAll("g").remove();
     d3.select(".tooltip").remove();
     d3.transition().delay(2000).selectAll(".pieText").remove();
+}
+
+async function create_gdp_line_chart_extra() {
+    const gdpSpending = await d3.csv("us_world_gdp_spending.csv", function (d) {
+        return {
+            Country: d["Country.Name"],
+            Year: d3.timeParse("%Y")(d.Year),
+            PercGDP: d.PercGDP,
+        };
+    });
+
+    us_data = gdpSpending.filter(function (d) {
+        return d.Country == "United States";
+    });
+
+    world_data = gdpSpending.filter(function (d) {
+        return d.Country == "World";
+    });
+
+    const data = us_data;
+
+    data2 = data;
+    data1 = data.filter((elem) => {
+        return elem.Year.getFullYear() < 2002;
+    });
+
+    console.log(data1);
+    console.log(data2);
+
+    // Set the dimensions of the SVG
+    const width = 1000;
+    const height = 500;
+    const margin = 50;
+
+    // Find the maximum percGDP and Year for scales
+    let maxGDP = d3.max(data, function (d) {
+        return +d.PercGDP;
+    });
+    let maxYear = d3.max(data, function (d) {
+        return +d.Year;
+    });
+
+    // Define X scale
+    let x = d3
+        .scaleTime()
+        .domain(
+            d3.extent(data, function (d) {
+                return d.Year;
+            })
+        )
+        .range([0, width - 2 * margin]);
+
+    // Define Y scale
+    let y = d3
+        .scaleLinear()
+        .domain([0, Math.floor(maxGDP + 1)])
+        .range([height - 2 * margin, 0]);
+
+    // Define initial x scale for transition
+    let x2 = d3
+        .scaleTime()
+        .domain(
+            d3.extent(data, function (d) {
+                return d.Year;
+            })
+        )
+        .range([0, 0]);
+
+    // Define initial y scale for transition
+    let y2 = d3
+        .scaleLinear()
+        .domain([0, Math.floor(maxGDP + 1)])
+        .range([0, 0]);
+
+    // Add color scale
+    let colScale = d3
+        .scaleLinear()
+        .domain([0, Math.floor(maxGDP + 1)])
+        .range(["white", "#d21f3c"]);
+
+    // Add a "g" element to the svg
+    let svg = d3
+        .select(".main-svg")
+        .append("g")
+        .attr("transform", "translate(" + margin + "," + margin + ")");
+
+    // Add the X and Y axis
+    // The y-axis
+    let yAxis = d3
+        .select(".main-svg")
+        .append("g")
+        .attr("transform", "translate(" + margin + "," + margin + ")")
+        .call(d3.axisLeft(y2).ticks(0))
+        .transition()
+        .duration(1000)
+        .call(d3.axisLeft(y).ticks(0))
+        .transition()
+        .call(d3.axisLeft(y));
+
+    let translate = height - margin;
+    let xAxis = d3
+        .select(".main-svg")
+        .append("g")
+        .attr("transform", "translate(" + margin + "," + translate + ")")
+        .call(d3.axisBottom(x2).ticks(0))
+        .transition()
+        .duration(1000)
+        .call(d3.axisBottom(x).ticks(0))
+        .transition()
+        .call(d3.axisBottom(x).ticks(20));
+
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("class", "axis-title")
+        .attr(
+            "transform",
+            "translate(0" + "," + (height - height / 2) / 2 + ")rotate(-90)"
+        )
+        .attr("y", -75)
+        .attr("x", 0)
+        .transition()
+        .duration(1000)
+        .attr("y", -25)
+        .attr("x", 0)
+        .text("% of GDP Spent on Defense");
+
+    // Add X axis label:
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("class", "axis-title")
+        .attr("x", width / 2 - 25)
+        .attr("y", height)
+        .transition()
+        .duration(1000)
+        .attr("x", width / 2 - 25)
+        .attr("y", height - margin - 10)
+        .text("Year");
+
+    // Add points for US data
+    let points = svg
+        .selectAll(".point")
+        .data(data1)
+        .enter()
+        .append("circle")
+        .attr("class", "point")
+        .attr("fill", (d) => colScale(d.PercGDP));
+
+    points
+        .attr("r", 0)
+        .attr("cx", (d) => x(d.Year))
+        .attr("cy", (d) => y(0))
+        .transition()
+        .delay(1000)
+        .duration(1000)
+        .attr("r", 3)
+        .attr("cx", (d) => x(d.Year))
+        .attr("cy", (d) => y(d.PercGDP));
+
+    points
+        .on("mouseover", (a, b, c) => {})
+        .on("mouseout", (d) => {})
+        .on("mousemove", (d) => {});
+
+    let lines = svg
+        .selectAll(".line-point")
+        .data(data1)
+        .enter()
+        .append("line")
+        .attr("class", "line-point")
+        .attr("x1", (d) => x(d.Year))
+        .attr("x2", (d) => x(d.Year))
+        .attr("y1", (d) => y(d.PercGDP))
+        .attr("y2", (d) => y(d.PercGDP));
+
+    lines
+        .transition()
+        .delay(3000)
+        .duration(500)
+        .attr("y2", (d) => height - 2 * margin)
+        .style("stroke", (d) => colScale(d.PercGDP))
+        .attr("stroke-width", 1);
+    lines.on("mouseover", (d) => {
+        console.log(d);
+    });
+
+    /** To Change Dataset!
+     *     let u = svg.selectAll(".point").data(data2);
+    let points2 = svg
+        .selectAll(".point")
+        .data(data2)
+        .enter()
+        .append("circle")
+        .attr("class", "point")
+        .attr("cx", (d) => x(d.Year))
+        .attr("cy", (d) => y(0))
+        .transition()
+        .duration(1000)
+        .attr("cx", (d) => x(d.Year))
+        .attr("cy", (d) => y(d.PercGDP))
+        .attr("r", 3);
+     */
+
+    //data = [];
+    // let path = svg
+    //     .selectAll("path")
+    //     .data([
+    //         data.filter((d) => {
+    //             return d.Year.getFullYear() < 2002;
+    //         }),
+    //     ])
+    //     .enter()
+    //     .append("path")
+    //     .attr("class", "year-point")
+    //     .attr("fill", "none")
+    //     .attr("stroke", "dodgerblue")
+    //     .attr("stroke-width", 1.5)
+    //     .attr(
+    //         "d",
+    //         d3
+    //             .line()
+    //             .x((d) => 0)
+    //             .y((d) => 0)
+    //     )
+    //     .transition()
+    //     .duration(2000)
+    //     .attr(
+    //         "d",
+    //         d3
+    //             .line()
+    //             .x((d) => x(d.Year))
+    //             .y((d) => y(d.PercGDP))
+    //     );
+
+    // var n = svg
+    //     .selectAll(".year-point")
+    //     .data(data)
+    //     .enter()
+    //     .append("path")
+    //     .attr("class", "year-point")
+    //     .attr("fill", "none")
+    //     .attr("stroke", "dodgerblue")
+    //     .attr("stroke-width", 1.5)
+    //     .attr(
+    //         "d",
+    //         d3
+    //             .line()
+    //             .x((d) => x(d.Year))
+    //             .y((d) => y(d.PercGDP))
+    //     );
+
+    //path.on("mouseover", (d, i) => {
+    //console.log(d);
+    //console.log(i);
+    //});
+
+    // svg.append("text")
+    //     .attr("text-anchor", "end")
+    //     .attr(
+    //         "transform",
+    //         "translate(" +
+    //             5 / 2 +
+    //             "," +
+    //             (height - height / 2) / 2 +
+    //             ")rotate(-90)"
+    //     )
+    //     .attr("y", -margin + 10)
+    //     .attr("x", -margin + 20)
+    //     .text("% of GDP Spent on Defense");
+
+    // // Add X axis label:
+    // svg.append("text")
+    //     .attr("text-anchor", "end")
+    //     .attr("x", width - 500)
+    //     .attr("y", height + margin / 2 + 20)
+    //     .text("Year");
+
+    // Add the line for World data
+    // svg.append("path")
+    //     .datum(world_data)
+    //     .attr("fill", "none")
+    //     .attr("stroke", "steelblue")
+    //     .attr("stroke-width", 1.5)
+    //     .attr(
+    //         "d",
+    //         d3
+    //             .line()
+    //             .x(function (d) {
+    //                 return x(d.Year);
+    //             })
+    //             .y(function (d) {
+    //                 return y(d.PercGDP);
+    //             })
+    //     );
+
+    //handleHover(svg, width, height, x, y, data);
 }

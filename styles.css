@@ -15,7 +15,7 @@ body {
 }
 
 button {
-    background-color: #e63946; /* Green */
+    background-color: #e63946;
     border: none;
     color: white;
     padding: 10px 25px;
@@ -28,8 +28,12 @@ button {
 }
 
 button:hover {
-    background-color: #e02030; /* Green */
+    background-color: #c41a28;
     border-color: white;
+}
+
+.active {
+    background-color: #c41a28;
 }
 
 .App-header {
@@ -58,6 +62,9 @@ button:hover {
     font-size: 14.5px;
 }
 
+#explanation-title {
+    margin-block-end: 10px;
+}
 
 .svg-container {
     border: 2px solid black;
@@ -74,8 +81,8 @@ button:hover {
 }
 
 .explanation {
-    width: 60%;
-    height: 8.5rem;
+    width: 63%;
+    height: 10rem;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
@@ -140,8 +147,6 @@ p {
     padding-left: 1rem;
     font-size: 13.5px;
 }
-
-
 
 .axis-title {
     font-size: 11px;
