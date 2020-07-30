@@ -660,7 +660,7 @@ function handleClick(event, id) {
         document.getElementById("current-slide").innerHTML = slide;
 
         document.getElementById("explanation-title").innerHTML =
-            "Top 5 Countries for Military Expenditure";
+            "Top 5 Countries in Military Expenditure";
 
         document.getElementById("vis-title").textContent =
             "Total Defense Spending in Billions USD vs. Year (1993 - 2018)";
