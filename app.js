@@ -222,7 +222,8 @@ async function create_spending_chart() {
         })
         .attr("cy", function (d) {
             return y(0);
-        });
+        })
+        .attr("pointer-events", "none");
 
     points
         .transition()
@@ -234,45 +235,10 @@ async function create_spending_chart() {
         })
         .attr("cy", function (d) {
             return y(d.TotalSpending);
-        });
-
-    points
-        .on("mouseover", function (d) {
-            d3.select(this).transition().attr("r", 8);
-
-            // Add Country header to Tooltip
-            tooltip
-                .select(".country")
-                .html(
-                    "<p class='tooltip-para'><b>" +
-                        d.Country +
-                        "<br>" +
-                        d.Year +
-                        "</p><hr>"
-                )
-                .style("color", "black");
-
-            // Add Spending for that Country to tooltip
-            let amount = parseFloat(d.TotalSpending).toFixed(1);
-            tooltip
-                .select(".spending")
-                .html("<b>Total Defense Spending: </b>$" + amount + " B USD");
-
-            // Make tooltip visible when hovering over slice
-            tooltip.style("display", "block");
-            tooltip.transition().duration(250).style("opacity", 2);
         })
-        .on("mouseout", function (d) {
-            d3.select(this).transition().attr("r", 5);
-            // Hide tooltip on mouse exit from slice
-            tooltip.style("display", "none");
-            tooltip.style("opacity", 0);
-        })
-        .on("mousemove", function (d) {
-            tooltip
-                .style("top", d3.event.layerY + 20 + "px")
-                .style("left", d3.event.layerX + "px");
-        });
+        .transition()
+        .delay(500)
+        .attr("pointer-events", "auto");
 
     // Plot US without transitions
     let us_points = svg
@@ -296,45 +262,8 @@ async function create_spending_chart() {
         })
         .attr("cy", function (d) {
             return y(d.TotalSpending);
-        });
-
-    us_points
-        .on("mouseover", function (d) {
-            d3.select(this).transition().attr("r", 8);
-
-            // Add Country header to Tooltip
-            tooltip
-                .select(".country")
-                .html(
-                    "<p class='tooltip-para'><b>" +
-                        d.Country +
-                        "<br>" +
-                        d.Year +
-                        "</p><hr>"
-                )
-                .style("color", "black");
-
-            // Add Spending for that Country to tooltip
-            let amount = parseFloat(d.TotalSpending).toFixed(1);
-            tooltip
-                .select(".spending")
-                .html("<b>Total Defense Spending: </b>$" + amount + " B USD");
-
-            // Make tooltip visible when hovering over slice
-            tooltip.style("display", "block");
-            tooltip.transition().duration(250).style("opacity", 2);
         })
-        .on("mouseout", function (d) {
-            d3.select(this).transition().attr("r", 5);
-            // Hide tooltip on mouse exit from slice
-            tooltip.style("display", "none");
-            tooltip.style("opacity", 0);
-        })
-        .on("mousemove", function (d) {
-            tooltip
-                .style("top", d3.event.layerY + 20 + "px")
-                .style("left", d3.event.layerX + "px");
-        });
+        .attr("pointer-events", "auto");
 
     let path = svg
         .selectAll(".point-line")
@@ -362,6 +291,7 @@ async function create_spending_chart() {
         .delay(3250)
         .duration(2000)
         .attr("opacity", 1);
+
     line1 = {
         origin: [500, 500, 300, 300],
         destination: [500, 400, 300, 200],
@@ -397,13 +327,17 @@ async function create_spending_chart() {
         .attr("class", "tooltip");
     tooltip.append("div").attr("class", "country");
     tooltip.append("div").attr("class", "spending");
+
+    enable_mouse_events();
 }
 
 function destroy_svg_spending_chart() {
+    d3.selectAll(".point").attr("pointer-events", "none");
+
     // Destroy previous annotation
     d3.selectAll(".annotations")
         .transition()
-        .duration(250)
+        .duration(500)
         .attr("opacity", 0)
         .remove();
 
@@ -495,40 +429,77 @@ function destroy_svg_spending_chart() {
     let yAxis = svg
         .select(".yAxis-g")
         .transition()
-        .delay(1000)
+        .delay(2000)
         .duration(500)
-        .call(d3.axisLeft(y).ticks(0))
-        .transition()
-        .delay(1000)
-        .duration(1000)
-        .call(d3.axisLeft(y2).ticks(0))
-        .transition()
-        .attr("opacity", 0);
+        .call(d3.axisLeft(y).ticks(0));
 
     let xAxis = svg
         .select(".xAxis-g")
         .transition()
-        .delay(1000)
+        .delay(2000)
         .duration(500)
-        .call(d3.axisBottom(x).tickValues(0))
-        .transition()
-        .delay(1000)
-        .duration(1000)
-        .call(d3.axisBottom(x2).tickValues(0))
-        .transition()
-        .attr("opacity", 0);
+        .call(d3.axisBottom(x).tickValues(0));
 
-    xAxis.transition().delay(3000).remove();
-    yAxis.transition().delay(3000).remove();
-    axisTitles.transition().delay(3000).remove();
-    svg.transition().delay(3000).select(".plot-g").remove();
+    //xAxis.transition().delay(3000).remove();
+    //yAxis.transition().delay(3000).remove();
+    axisTitles.transition().delay(2000).remove();
+    svg.transition().delay(3000).select(".plot-g").selectAll("*").remove();
+}
+
+function disable_mouse_events() {
+    d3.selectAll(".point").attr("pointer-events", "none");
+}
+
+function enable_mouse_events() {
+    // Make tooltip
+    let tooltip = d3.select(".tooltip");
+
+    d3.selectAll(".point")
+        .on("mouseover", function (d) {
+            d3.select(this).transition().attr("r", 8);
+
+            // Add Country header to Tooltip
+            tooltip
+                .select(".country")
+                .html(
+                    "<p class='tooltip-para'><b>" +
+                        d.Country +
+                        "<br>" +
+                        d.Year +
+                        "</p><hr>"
+                )
+                .style("color", "black");
+
+            // Add Spending for that Country to tooltip
+            let amount = parseFloat(d.TotalSpending).toFixed(1);
+            tooltip
+                .select(".spending")
+                .html("<b>Total Defense Spending: </b>$" + amount + " B USD");
+
+            // Make tooltip visible when hovering over slice
+            tooltip.style("display", "block");
+            tooltip.transition().duration(250).style("opacity", 2);
+        })
+        .on("mouseout", function (d) {
+            d3.select(this).transition().attr("r", 5);
+            // Hide tooltip on mouse exit from slice
+            tooltip.style("display", "none");
+            tooltip.style("opacity", 0);
+        })
+        .on("mousemove", function (d) {
+            tooltip
+                .style("top", d3.event.layerY + 20 + "px")
+                .style("left", d3.event.layerX + "px");
+        });
 }
 
 function create_spending_chart_2() {
+    let points = d3.selectAll(".point").attr("pointer-events", "none");
+
     // Destroy previous annotation
     d3.selectAll(".annotations")
         .transition()
-        .duration(250)
+        .duration(500)
         .attr("opacity", 0)
         .remove();
 
@@ -588,14 +559,16 @@ function create_spending_chart_2() {
         .duration(1000)
         .call(d3.axisLeft(y));
 
-    points = svg.select(".plot-g").selectAll(".point");
     points
         .transition()
         .delay(1500)
         .duration(1000)
         .attr("cy", function (d) {
             return y(d.TotalSpending);
-        });
+        })
+        .transition()
+        .delay(500)
+        .attr("pointer-events", "auto");
 
     path = svg
         .selectAll(".point-line")
@@ -620,11 +593,17 @@ function create_spending_chart_2() {
 
     line2 = {
         origin: [600, 600, 150, 150],
-        destination: [600, 760, 150, 150],
+        destination: [600, 855, 150, 150],
     };
 
     // Define array of annotation lines
-    let text_lines = ["This is the United States."];
+    let text_lines = [
+        "This is the United States. Historically, the",
+        "US has spent more than three-times as ",
+        "much as any other country in the world",
+        "at any given point in time in the last 58",
+        "years.",
+    ];
 
     create_annotations_gdp(
         line1,
@@ -654,13 +633,14 @@ function handleClick(event, id) {
 
         create_pie_chart_svg();
     } else if (slide == 2) {
+        disable_mouse_events();
         document.getElementById("current-slide").innerHTML = slide;
 
         document.getElementById("explanation-title").innerHTML =
-            "Top 5 Countries for Military Expenditure";
+            "Top 5 Countries in Military Expenditure";
 
         document.getElementById("vis-title").textContent =
-            "Total Defense Spending in USD versus Year (1993 - 2018)";
+            "Total Defense Spending in Billions USD vs. Year (1993 - 2018)";
 
         let bodyText =
             "The other top four military-spending countries as of 2018 were China, Saudi Arabia, Russia and India. Notice that China appears to be spending significantly more than the other three as of the last two decades." +
@@ -675,13 +655,15 @@ function handleClick(event, id) {
 
         create_spending_chart();
     } else if (slide == 3) {
+        disable_mouse_events();
+
         document.getElementById("current-slide").innerHTML = slide;
 
         document.getElementById("explanation-title").innerHTML =
             "Top 5 Countries for Military Expenditure";
 
         document.getElementById("vis-title").textContent =
-            "Total Defense Spending in USD versus Year (1993 - 2018)";
+            "Total Defense Spending in Billions USD vs. Year (1993 - 2018)";
 
         let bodyText =
             "Now, adding the United States to the picture shows the sheer magnitude by which the United States out-spends even the most heavily spending other countries. When analyzing overall spending, " +
@@ -695,6 +677,8 @@ function handleClick(event, id) {
 
         create_spending_chart_2();
     } else if (slide == 4) {
+        disable_mouse_events();
+
         document.getElementById("current-slide").innerHTML = slide;
         // Title of Plot
         document.getElementById("vis-title").textContent =
@@ -714,6 +698,8 @@ function handleClick(event, id) {
         destroy_svg_spending_chart();
         create_gdp_line_chart_1();
     } else if (slide == 5) {
+        disable_mouse_events();
+
         document.getElementById("current-slide").innerHTML = slide;
         // Title of Plot
         document.getElementById("vis-title").textContent =
@@ -745,19 +731,19 @@ function handleClick(event, id) {
 
         // Paragraph Title
         document.getElementById("explanation-title").innerHTML =
-            "President Nixon Gradually Decreasing Involvement in Vietnam";
+            "President Nixon Gradually Decreases Involvement in Vietnam";
 
         // Paragraph Text
         let bodyText =
             "By 1969, the Vietnam War was very unpopular with the general US public. President Nixon sought to reduce US participation, which " +
             "he gradually did until the Paris Peace Accords were signed in 1973 upon which direct US involvement in the Vietnam War ended. During the 1970s, the US defense budget has been argued by some to have been" +
             " perhaps excessively low. This led to concerns at the time about the deteriorating quality of the US military forces, equipment, and competition from the Soviet Union. These reduced defense budgets began" +
-            " from approximately 1967 and lasted until 1981 when Ronald Reagan won the presidency.";
+            " from approximately 1967 and lasted until 1981 when Ronald Reagan began his presidency.";
         document.getElementById("explanation-text").innerHTML = bodyText;
 
         //destroy_svg_spending_chart();
 
-        //create_gdp_line_chart_3();
+        create_gdp_line_chart_3();
     } else if (slide == 7) {
         document.getElementById("current-slide").innerHTML = slide;
         // Title of Plot
@@ -949,7 +935,7 @@ function create_gdp_line_chart_7() {
     // Destroy previous annotation
     d3.selectAll(".annotations")
         .transition()
-        .duration(250)
+        .duration(500)
         .attr("opacity", 0)
         .remove();
 
@@ -990,103 +976,35 @@ function create_gdp_line_chart_7() {
 
     // Fade all previous points
     // We want to highlight only key years
-    fade_data(data, [
-        2009,
-        2010,
-        2011,
-        2012,
-        2013,
-        2014,
-        2015,
-        2016,
-        2017,
-        2018,
-    ]);
+    years = [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018];
+    fade_data(data, years);
 
     let tooltip = d3.select(".tooltip");
 
-    let points = svg
-        .selectAll(".point")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("class", "point")
-        .attr("r", 0)
-        .attr("cx", (d) => x(d.Year))
-        .attr("cy", (d) => y(0))
-        .attr("fill", (d) => colScale(d.PercGDP));
+    // Remove unnecessary points
+    let points = svg.selectAll(".point");
+    points.each(function (d) {
+        if (years.includes(d.Year.getFullYear())) {
+            d3.select(this)
+                .transition()
+                .delay(1250)
+                .duration(1000)
+                .attr("r", 5)
+                .attr("cy", (d) => y(d.PercGDP))
+                .attr("pointer-events", "auto");
+        }
+    });
 
-    points
-        .transition()
-        .delay(1500)
-        .duration(1000)
-        .attr("r", 5)
-        .attr("cx", (d) => x(d.Year))
-        .attr("cy", (d) => y(d.PercGDP));
-
-    points
-        .on("mouseover", function (d) {
-            d3.select(this).transition().attr("r", 8);
-
-            let current = this;
-
-            let others = d3.selectAll(".point").filter(function (d) {
-                return current != this;
-            });
-            //others.transition().duration(500).attr("fill", "grey");
-            // Add Country header to Tooltip
-            tooltip
-                .select(".country")
-                .html(
-                    "<p class='tooltip-para'><b>" +
-                        d.Country +
-                        "<br>" +
-                        d.Year.getFullYear() +
-                        "</p><hr>"
-                )
-                .style("color", "black");
-
-            // Add Spending for that Country to tooltip
-            let amount = parseFloat(d.PercGDP).toFixed(2);
-            tooltip
-                .select(".spending")
-                .html("<b>% of GDP: </b>" + amount + "%");
-
-            // Make tooltip visible when hovering over slice
-            tooltip.style("display", "block");
-            tooltip.transition().duration(250).style("opacity", 2);
-        })
-        .on("mouseout", function (d) {
-            d3.select(this).transition().attr("r", 4);
-            // Hide tooltip on mouse exit from slice
-            tooltip.style("display", "none");
-            tooltip.style("opacity", 0);
-        })
-        .on("mousemove", function (d) {
-            tooltip
-                .style("top", d3.event.layerY + 20 + "px")
-                .style("left", d3.event.layerX + "px");
-        });
-
-    let lines = svg
-        .selectAll(".line-point")
-        .data(data)
-        .enter()
-        .append("line")
-        .attr("class", "line-point")
-        .style("opacity", 1)
-        .attr("x1", (d) => x(d.Year))
-        .attr("x2", (d) => x(d.Year))
-        .attr("y1", (d) => y(d.PercGDP))
-        .attr("y2", (d) => y(d.PercGDP));
-
-    lines
-        .transition()
-        .delay(2250)
-        .duration(500)
-        .attr("y2", (d) => height - margin.bottom - margin.top)
-        .style("stroke", (d) => colScale(d.PercGDP))
-        .attr("stroke-width", 1.5);
+    let lines = svg.selectAll(".line-point");
+    lines.each(function (d) {
+        if (years.includes(d.Year.getFullYear())) {
+            d3.select(this)
+                .transition()
+                .delay(1250)
+                .duration(1000)
+                .attr("y2", (d) => y(d.PercGDP));
+        }
+    });
 
     // Define the co-ordinates of the annotation lines
     // Format of line: [x1, x2, y1, y2]
@@ -1125,7 +1043,7 @@ function create_gdp_line_chart_6() {
     // Destroy previous annotation
     d3.selectAll(".annotations")
         .transition()
-        .duration(250)
+        .duration(500)
         .attr("opacity", 0)
         .remove();
 
@@ -1166,92 +1084,35 @@ function create_gdp_line_chart_6() {
 
     // Fade all previous points
     // We want to highlight only key years
-    fade_data(data, [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008]);
+    let years = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008];
+    fade_data(data, years);
 
     let tooltip = d3.select(".tooltip");
 
-    let points = svg
-        .selectAll(".point")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("class", "point")
-        .attr("r", 0)
-        .attr("cx", (d) => x(d.Year))
-        .attr("cy", (d) => y(0))
-        .attr("fill", (d) => colScale(d.PercGDP));
+    // Remove unnecessary points
+    let points = svg.selectAll(".point");
+    points.each(function (d) {
+        if (years.includes(d.Year.getFullYear())) {
+            d3.select(this)
+                .transition()
+                .delay(1250)
+                .duration(1000)
+                .attr("r", 5)
+                .attr("cy", (d) => y(d.PercGDP))
+                .attr("pointer-events", "auto");
+        }
+    });
 
-    points
-        .transition()
-        .delay(1500)
-        .duration(1000)
-        .attr("r", 5)
-        .attr("cx", (d) => x(d.Year))
-        .attr("cy", (d) => y(d.PercGDP));
-
-    points
-        .on("mouseover", function (d) {
-            d3.select(this).transition().attr("r", 8);
-
-            let current = this;
-
-            let others = d3.selectAll(".point").filter(function (d) {
-                return current != this;
-            });
-            //others.transition().duration(500).attr("fill", "grey");
-            // Add Country header to Tooltip
-            tooltip
-                .select(".country")
-                .html(
-                    "<p class='tooltip-para'><b>" +
-                        d.Country +
-                        "<br>" +
-                        d.Year.getFullYear() +
-                        "</p><hr>"
-                )
-                .style("color", "black");
-
-            // Add Spending for that Country to tooltip
-            let amount = parseFloat(d.PercGDP).toFixed(2);
-            tooltip
-                .select(".spending")
-                .html("<b>% of GDP: </b>" + amount + "%");
-
-            // Make tooltip visible when hovering over slice
-            tooltip.style("display", "block");
-            tooltip.transition().duration(250).style("opacity", 2);
-        })
-        .on("mouseout", function (d) {
-            d3.select(this).transition().attr("r", 4);
-            // Hide tooltip on mouse exit from slice
-            tooltip.style("display", "none");
-            tooltip.style("opacity", 0);
-        })
-        .on("mousemove", function (d) {
-            tooltip
-                .style("top", d3.event.layerY + 20 + "px")
-                .style("left", d3.event.layerX + "px");
-        });
-
-    let lines = svg
-        .selectAll(".line-point")
-        .data(data)
-        .enter()
-        .append("line")
-        .attr("class", "line-point")
-        .style("opacity", 1)
-        .attr("x1", (d) => x(d.Year))
-        .attr("x2", (d) => x(d.Year))
-        .attr("y1", (d) => y(d.PercGDP))
-        .attr("y2", (d) => y(d.PercGDP));
-
-    lines
-        .transition()
-        .delay(2250)
-        .duration(500)
-        .attr("y2", (d) => height - margin.bottom - margin.top)
-        .style("stroke", (d) => colScale(d.PercGDP))
-        .attr("stroke-width", 1.5);
+    let lines = svg.selectAll(".line-point");
+    lines.each(function (d) {
+        if (years.includes(d.Year.getFullYear())) {
+            d3.select(this)
+                .transition()
+                .delay(1250)
+                .duration(1000)
+                .attr("y2", (d) => y(d.PercGDP));
+        }
+    });
 
     // Define the co-ordinates of the annotation lines
     // Format of line: [x1, x2, y1, y2]
@@ -1288,7 +1149,7 @@ function create_gdp_line_chart_5() {
     // Destroy previous annotation
     d3.selectAll(".annotations")
         .transition()
-        .duration(250)
+        .duration(500)
         .attr("opacity", 0)
         .remove();
 
@@ -1310,7 +1171,7 @@ function create_gdp_line_chart_5() {
     d3.selectAll(".annotation-g").transition().delay(2000).remove();
 
     // Select the SVG container
-    let svg = d3.select(".main-svg").select("g");
+    let svg = d3.select(".main-svg").select(".plot-g");
 
     // Filter data points from 1960 to 1981
     const data = data_dict.us_gdp_data.filter(function (d) {
@@ -1329,104 +1190,35 @@ function create_gdp_line_chart_5() {
 
     // Fade all previous points
     // We want to highlight only key years
-    fade_data(data, [
-        1990,
-        1991,
-        1992,
-        1993,
-        1994,
-        1995,
-        1996,
-        1997,
-        1998,
-        1999,
-        2000,
-    ]);
+    years = [1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000];
+    fade_data(data, years);
 
     let tooltip = d3.select(".tooltip");
 
-    let points = svg
-        .selectAll(".point")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("class", "point")
-        .attr("r", 0)
-        .attr("cx", (d) => x(d.Year))
-        .attr("cy", (d) => y(0))
-        .attr("fill", (d) => colScale(d.PercGDP));
+    // Remove unnecessary points
+    let points = svg.selectAll(".point");
+    points.each(function (d) {
+        if (years.includes(d.Year.getFullYear())) {
+            d3.select(this)
+                .transition()
+                .delay(1250)
+                .duration(1000)
+                .attr("r", 5)
+                .attr("cy", (d) => y(d.PercGDP))
+                .attr("pointer-events", "auto");
+        }
+    });
 
-    points
-        .transition()
-        .delay(1500)
-        .duration(1000)
-        .attr("r", 5)
-        .attr("cx", (d) => x(d.Year))
-        .attr("cy", (d) => y(d.PercGDP));
-
-    points
-        .on("mouseover", function (d) {
-            d3.select(this).transition().attr("r", 8);
-
-            let current = this;
-
-            let others = d3.selectAll(".point").filter(function (d) {
-                return current != this;
-            });
-            //others.transition().duration(500).attr("fill", "grey");
-            // Add Country header to Tooltip
-            tooltip
-                .select(".country")
-                .html(
-                    "<p class='tooltip-para'><b>" +
-                        d.Country +
-                        "<br>" +
-                        d.Year.getFullYear() +
-                        "</p><hr>"
-                )
-                .style("color", "black");
-
-            // Add Spending for that Country to tooltip
-            let amount = parseFloat(d.PercGDP).toFixed(2);
-            tooltip
-                .select(".spending")
-                .html("<b>% of GDP: </b>" + amount + "%");
-
-            // Make tooltip visible when hovering over slice
-            tooltip.style("display", "block");
-            tooltip.transition().duration(250).style("opacity", 2);
-        })
-        .on("mouseout", function (d) {
-            d3.select(this).transition().attr("r", 4);
-            // Hide tooltip on mouse exit from slice
-            tooltip.style("display", "none");
-            tooltip.style("opacity", 0);
-        })
-        .on("mousemove", function (d) {
-            tooltip
-                .style("top", d3.event.layerY + 20 + "px")
-                .style("left", d3.event.layerX + "px");
-        });
-
-    let lines = svg
-        .selectAll(".line-point")
-        .data(data)
-        .enter()
-        .append("line")
-        .attr("class", "line-point")
-        .style("opacity", 1)
-        .attr("x1", (d) => x(d.Year))
-        .attr("x2", (d) => x(d.Year))
-        .attr("y1", (d) => y(d.PercGDP))
-        .attr("y2", (d) => y(d.PercGDP));
-
-    lines
-        .transition()
-        .delay(2250)
-        .duration(500)
-        .attr("y2", (d) => height - margin.bottom - margin.top)
-        .style("stroke", (d) => colScale(d.PercGDP))
-        .attr("stroke-width", 1.5);
+    let lines = svg.selectAll(".line-point");
+    lines.each(function (d) {
+        if (years.includes(d.Year.getFullYear())) {
+            d3.select(this)
+                .transition()
+                .delay(1250)
+                .duration(1000)
+                .attr("y2", (d) => y(d.PercGDP));
+        }
+    });
 
     // Define the co-ordinates of the annotation lines
     // Format of line: [x1, x2, y1, y2]
@@ -1457,7 +1249,7 @@ function create_gdp_line_chart_4() {
     // Destroy previous annotation
     d3.selectAll(".annotations")
         .transition()
-        .duration(250)
+        .duration(500)
         .attr("opacity", 0)
         .remove();
 
@@ -1479,7 +1271,7 @@ function create_gdp_line_chart_4() {
     d3.selectAll(".annotation-g").transition().delay(2000).remove();
 
     // Select the SVG container
-    let svg = d3.select(".main-svg").select("g");
+    let svg = d3.select(".main-svg").select(".plot-g");
 
     // Filter data points from 1960 to 1981
     const data = data_dict.us_gdp_data.filter(function (d) {
@@ -1498,92 +1290,36 @@ function create_gdp_line_chart_4() {
 
     // Fade all previous points
     // We want to highlight only key years
+    let years = [1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989];
     fade_data(data, [1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989]);
 
     let tooltip = d3.select(".tooltip");
 
-    let points = svg
-        .selectAll(".point")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("class", "point")
-        .attr("r", 0)
-        .attr("cx", (d) => x(d.Year))
-        .attr("cy", (d) => y(0))
-        .attr("fill", (d) => colScale(d.PercGDP));
+    // Remove unnecessary points
+    let points = svg.selectAll(".point");
+    console.log(points);
+    points.each(function (d) {
+        if (years.includes(d.Year.getFullYear())) {
+            d3.select(this)
+                .transition()
+                .delay(1250)
+                .duration(1000)
+                .attr("r", 5)
+                .attr("cy", (d) => y(d.PercGDP))
+                .attr("pointer-events", "auto");
+        }
+    });
 
-    points
-        .transition()
-        .delay(1500)
-        .duration(1000)
-        .attr("r", 5)
-        .attr("cx", (d) => x(d.Year))
-        .attr("cy", (d) => y(d.PercGDP));
-
-    points
-        .on("mouseover", function (d) {
-            d3.select(this).transition().attr("r", 8);
-
-            let current = this;
-
-            let others = d3.selectAll(".point").filter(function (d) {
-                return current != this;
-            });
-            //others.transition().duration(500).attr("fill", "grey");
-            // Add Country header to Tooltip
-            tooltip
-                .select(".country")
-                .html(
-                    "<p class='tooltip-para'><b>" +
-                        d.Country +
-                        "<br>" +
-                        d.Year.getFullYear() +
-                        "</p><hr>"
-                )
-                .style("color", "black");
-
-            // Add Spending for that Country to tooltip
-            let amount = parseFloat(d.PercGDP).toFixed(2);
-            tooltip
-                .select(".spending")
-                .html("<b>% of GDP: </b>" + amount + "%");
-
-            // Make tooltip visible when hovering over slice
-            tooltip.style("display", "block");
-            tooltip.transition().duration(250).style("opacity", 2);
-        })
-        .on("mouseout", function (d) {
-            d3.select(this).transition().attr("r", 4);
-            // Hide tooltip on mouse exit from slice
-            tooltip.style("display", "none");
-            tooltip.style("opacity", 0);
-        })
-        .on("mousemove", function (d) {
-            tooltip
-                .style("top", d3.event.layerY + 20 + "px")
-                .style("left", d3.event.layerX + "px");
-        });
-
-    let lines = svg
-        .selectAll(".line-point")
-        .data(data)
-        .enter()
-        .append("line")
-        .attr("class", "line-point")
-        .style("opacity", 1)
-        .attr("x1", (d) => x(d.Year))
-        .attr("x2", (d) => x(d.Year))
-        .attr("y1", (d) => y(d.PercGDP))
-        .attr("y2", (d) => y(d.PercGDP));
-
-    lines
-        .transition()
-        .delay(2250)
-        .duration(500)
-        .attr("y2", (d) => height - margin.bottom - margin.top)
-        .style("stroke", (d) => colScale(d.PercGDP))
-        .attr("stroke-width", 1.5);
+    let lines = svg.selectAll(".line-point");
+    lines.each(function (d) {
+        if (years.includes(d.Year.getFullYear())) {
+            d3.select(this)
+                .transition()
+                .delay(1250)
+                .duration(1000)
+                .attr("y2", (d) => y(d.PercGDP));
+        }
+    });
 
     // Define the co-ordinates of the annotation lines
     // Format of line: [x1, x2, y1, y2]
@@ -1612,11 +1348,7 @@ function create_gdp_line_chart_4() {
 function create_gdp_line_chart_3() {
     // Destroy previous annotation
 
-    d3.selectAll(".annotations")
-        .transition()
-        .duration(250)
-        .attr("opacity", 0)
-        .remove();
+    d3.selectAll(".annotations").transition().duration(500).attr("opacity", 0);
 
     d3.selectAll(".annotation-line2")
         .transition()
@@ -1636,7 +1368,7 @@ function create_gdp_line_chart_3() {
     d3.selectAll(".annotation-g").transition().delay(2000).remove();
 
     // Select the SVG container
-    let svg = d3.select(".main-svg").select("g");
+    let svg = d3.select(".main-svg").select(".plot-g");
 
     // Filter data points from 1960 to 1981
     const data = data_dict.us_gdp_data.filter(function (d) {
@@ -1655,7 +1387,8 @@ function create_gdp_line_chart_3() {
 
     // Fade all previous points
     // We want to highlight only key years
-    fade_data(data, [
+    let years = [
+        1968,
         1969,
         1970,
         1971,
@@ -1668,92 +1401,36 @@ function create_gdp_line_chart_3() {
         1978,
         1979,
         1980,
-    ]);
+    ];
+    fade_data(data, years);
 
     let tooltip = d3.select(".tooltip");
 
-    let points = svg
-        .selectAll(".point")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("class", "point")
-        .attr("r", 0)
-        .attr("cx", (d) => x(d.Year))
-        .attr("cy", (d) => y(0))
-        .attr("fill", (d) => colScale(d.PercGDP));
+    // Remove unnecessary points
+    let points = svg.selectAll(".point");
+    console.log(points);
+    points.each(function (d) {
+        if (years.includes(d.Year.getFullYear())) {
+            d3.select(this)
+                .transition()
+                .delay(1250)
+                .duration(1000)
+                .attr("r", 5)
+                .attr("cy", (d) => y(d.PercGDP))
+                .attr("pointer-events", "auto");
+        }
+    });
 
-    points
-        .transition()
-        .delay(1500)
-        .duration(1000)
-        .attr("r", 5)
-        .attr("cx", (d) => x(d.Year))
-        .attr("cy", (d) => y(d.PercGDP));
-
-    points
-        .on("mouseover", function (d) {
-            d3.select(this).transition().attr("r", 8);
-
-            let current = this;
-
-            let others = d3.selectAll(".point").filter(function (d) {
-                return current != this;
-            });
-            //others.transition().duration(500).attr("fill", "grey");
-            // Add Country header to Tooltip
-            tooltip
-                .select(".country")
-                .html(
-                    "<p class='tooltip-para'><b>" +
-                        d.Country +
-                        "<br>" +
-                        d.Year.getFullYear() +
-                        "</p><hr>"
-                )
-                .style("color", "black");
-
-            // Add Spending for that Country to tooltip
-            let amount = parseFloat(d.PercGDP).toFixed(2);
-            tooltip
-                .select(".spending")
-                .html("<b>% of GDP: </b>" + amount + "%");
-
-            // Make tooltip visible when hovering over slice
-            tooltip.style("display", "block");
-            tooltip.transition().duration(250).style("opacity", 2);
-        })
-        .on("mouseout", function (d) {
-            d3.select(this).transition().attr("r", 4);
-            // Hide tooltip on mouse exit from slice
-            tooltip.style("display", "none");
-            tooltip.style("opacity", 0);
-        })
-        .on("mousemove", function (d) {
-            tooltip
-                .style("top", d3.event.layerY + 20 + "px")
-                .style("left", d3.event.layerX + "px");
-        });
-
-    let lines = svg
-        .selectAll(".line-point")
-        .data(data)
-        .enter()
-        .append("line")
-        .attr("class", "line-point")
-        .style("opacity", 1)
-        .attr("x1", (d) => x(d.Year))
-        .attr("x2", (d) => x(d.Year))
-        .attr("y1", (d) => y(d.PercGDP))
-        .attr("y2", (d) => y(d.PercGDP));
-
-    lines
-        .transition()
-        .delay(2250)
-        .duration(500)
-        .attr("y2", (d) => height - margin.bottom - margin.top)
-        .style("stroke", (d) => colScale(d.PercGDP))
-        .attr("stroke-width", 1.5);
+    let lines = svg.selectAll(".line-point");
+    lines.each(function (d) {
+        if (years.includes(d.Year.getFullYear())) {
+            d3.select(this)
+                .transition()
+                .delay(1250)
+                .duration(1000)
+                .attr("y2", (d) => y(d.PercGDP));
+        }
+    });
 
     // Define the co-ordinates of the annotation lines
     // Format of line: [x1, x2, y1, y2]
@@ -1780,7 +1457,7 @@ function create_gdp_line_chart_3() {
 
 function create_gdp_line_chart_2() {
     // Select the SVG container
-    let svg = d3.select(".main-svg").select("g");
+    let svg = d3.select(".main-svg").select(".plot-g");
 
     // Filter data points from 1960 to 1969
     const data = data_dict.us_gdp_data.filter(function (d) {
@@ -1797,24 +1474,36 @@ function create_gdp_line_chart_2() {
     const width = gdp_dimensions.width;
     const margin = gdp_dimensions.margin;
 
-    // Add points for US data
-    let points = svg
-        .selectAll(".point")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("class", "point")
-        .attr("fill", (d) => colScale(d.PercGDP));
+    let tooltip = d3.select(".tooltip");
 
-    points
-        .attr("r", 0)
-        .attr("cx", (d) => x(d.Year))
-        .attr("cy", (d) => y(0))
-        .transition()
-        .duration(1000)
-        .attr("r", 4)
-        .attr("cx", (d) => x(d.Year))
-        .attr("cy", (d) => y(d.PercGDP));
+    // Remove unnecessary points
+    let points = svg.selectAll(".point");
+    points.each(function (d) {
+        if (d.Year.getFullYear() > 1967) {
+            d3.select(this)
+                .attr("opacity", 1)
+                .transition()
+                .duration(1000)
+                .attr("r", 0)
+                .attr("cy", (d) => y(0));
+        } else {
+            d3.select(this)
+                .transition()
+                .delay(500)
+                .attr("pointer-events", "auto");
+        }
+    });
+
+    let lines = svg.selectAll(".line-point");
+    lines.each(function (d) {
+        if (d.Year.getFullYear() > 1967) {
+            d3.select(this)
+                .transition()
+                //.delay(500)
+                .duration(1000)
+                .attr("y1", (d) => height - margin.bottom - margin.top);
+        }
+    });
 
     points
         .on("mouseover", function (d) {
@@ -1860,38 +1549,6 @@ function create_gdp_line_chart_2() {
                 .style("left", d3.event.layerX + "px");
         });
 
-    let lines = svg
-        .selectAll(".line-point")
-        .data(data)
-        .enter()
-        .append("line")
-        .attr("class", "line-point")
-        .style("opacity", 1)
-        .attr("x1", (d) => x(d.Year))
-        .attr("x2", (d) => x(d.Year))
-        .attr("y1", (d) => y(d.PercGDP))
-        .attr("y2", (d) => y(d.PercGDP));
-
-    lines
-        .transition()
-        .delay(750)
-        .duration(500)
-        .attr("y2", (d) => height - margin.bottom - margin.top)
-        .style("stroke", (d) => colScale(d.PercGDP))
-        .attr("stroke-width", 1.5);
-
-    lines.on("mouseover", (d) => {
-        //console.log(d);
-    });
-
-    // Make tooltip
-    let tooltip = d3
-        .select(".svg1-container")
-        .append("div")
-        .attr("class", "tooltip");
-    tooltip.append("div").attr("class", "country");
-    tooltip.append("div").attr("class", "spending");
-
     // We want to highlight only key years
     fade_data(data, [1965, 1966, 1967]);
 
@@ -1916,10 +1573,12 @@ function create_gdp_line_chart_2() {
         "Vietnam War.",
     ];
 
-    create_annotations_gdp(line1, line2, text_lines, 500, "Increase");
+    create_annotations_gdp(line1, line2, text_lines, 500, "Increase", 1000);
 }
 
 async function create_gdp_line_chart_1() {
+    d3.selectAll(".point").attr("pointer-events", "none");
+
     const gdpSpending = await d3.csv("us_world_gdp_spending.csv", function (d) {
         return {
             Country: d["Country.Name"],
@@ -2001,20 +1660,24 @@ async function create_gdp_line_chart_1() {
     gdp_scales.colScale = colScale;
 
     // Add a "g" element to the svg
-    let svg = d3
-        .select(".main-svg")
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    // Add the X and Y axis
-    // The y-axis
-    let yAxis = d3
-        .select(".main-svg")
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-        .call(d3.axisLeft(y2).ticks(0))
+    d3.select(".main-svg")
+        .select(".plot-g")
         .transition()
         .delay(3000)
+        .selectAll("*")
+        .remove();
+    //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    let svg = d3.select(".main-svg").select(".plot-g");
+    // Add the X and Y axis
+    // The y-axis
+    let yAxis = d3.select(".main-svg").select(".yAxis-g");
+
+    yAxis
+        //.append("g")
+        //.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        //.call(d3.axisLeft(y2).ticks(0))
+        .transition()
+        .delay(2500)
         .duration(500)
         .call(d3.axisLeft(y).ticks(0))
         .transition()
@@ -2023,11 +1686,12 @@ async function create_gdp_line_chart_1() {
     let translate = height - margin.bottom;
     let xAxis = d3
         .select(".main-svg")
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + translate + ")")
-        .call(d3.axisBottom(x2).ticks(0))
+        .select(".xAxis-g")
+        //.append("g")
+        //.attr("transform", "translate(" + margin.left + "," + translate + ")")
+        //.call(d3.axisBottom(x2).ticks(0))
         .transition()
-        .delay(3000)
+        .delay(2500)
         .duration(500)
         .call(d3.axisBottom(x).ticks(0))
         .transition()
@@ -2044,7 +1708,7 @@ async function create_gdp_line_chart_1() {
         .attr("y", -75)
         .attr("x", 0)
         .transition()
-        .delay(3000)
+        .delay(2500)
         .duration(1000)
         .attr("y", -30)
         .attr("x", 0)
@@ -2057,30 +1721,25 @@ async function create_gdp_line_chart_1() {
         .attr("x", width / 2 - 25)
         .attr("y", height)
         .transition()
-        .delay(3000)
+        .delay(2500)
         .duration(1000)
         .attr("x", width / 2 - 25)
         .attr("y", height - margin.bottom + 10)
         .text("Year");
 
     let points = svg
+        .append("g")
         .selectAll(".point")
         .data(data)
         .enter()
         .append("circle")
         .attr("class", "point")
         .attr("r", 0)
+        .attr("opacity", 1)
         .attr("cx", (d) => x(d.Year))
         .attr("cy", (d) => y(0))
-        .attr("fill", (d) => colScale(d.PercGDP));
-
-    points
-        .transition()
-        .delay(3500)
-        .duration(1000)
-        .attr("r", 5)
-        .attr("cx", (d) => x(d.Year))
-        .attr("cy", (d) => y(d.PercGDP));
+        .attr("fill", (d) => colScale(d.PercGDP))
+        .attr("pointer-events", "none");
 
     points
         .on("mouseover", function (d) {
@@ -2126,6 +1785,16 @@ async function create_gdp_line_chart_1() {
                 .style("left", d3.event.layerX + "px");
         });
 
+    points
+        .transition()
+        .delay(3000)
+        .duration(1000)
+        .attr("r", 5)
+        .attr("cx", (d) => x(d.Year))
+        .attr("cy", (d) => y(d.PercGDP))
+        .transition()
+        .attr("pointer-events", "auto");
+
     let lines = svg
         .selectAll(".line-point")
         .data(data)
@@ -2140,7 +1809,7 @@ async function create_gdp_line_chart_1() {
 
     lines
         .transition()
-        .delay(5250)
+        .delay(3750)
         .duration(500)
         .attr("y2", (d) => height - margin.bottom - margin.top)
         .style("stroke", (d) => colScale(d.PercGDP))
@@ -2150,9 +1819,11 @@ async function create_gdp_line_chart_1() {
     let tooltip = d3
         .select(".svg1-container")
         .append("div")
-        .attr("class", "tooltip-pie");
+        .attr("class", "tooltip");
     tooltip.append("div").attr("class", "country");
     tooltip.append("div").attr("class", "spending");
+
+    //enable_mouse_events();
 }
 
 function fade_data(data, years_kept) {
@@ -2160,7 +1831,6 @@ function fade_data(data, years_kept) {
     const hide_data = data.filter((d) => {
         return !years_kept.includes(d.Year.getFullYear());
     });
-    console.log(hide_data);
 
     let others = d3.selectAll(".point").filter(function (d) {
         if (hide_data.includes(d)) {
@@ -2174,8 +1844,8 @@ function fade_data(data, years_kept) {
         }
     });
 
-    others.transition().delay(1200).duration(500).style("opacity", 0.3);
-    others2.transition().delay(1200).duration(500).style("opacity", 0.3);
+    others.transition().delay(1000).duration(500).style("opacity", 0.3);
+    others2.transition().delay(1000).duration(500).style("opacity", 0.3);
 }
 
 function toggleData() {
