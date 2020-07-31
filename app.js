@@ -308,9 +308,9 @@ async function create_spending_chart() {
     // Define array of annotation lines
     let text_lines = [
         "These are the top four countries in",
-        "military spending since 1993 without",
-        "the United States: China, Russia, India,",
-        "and Saudi Arabia.",
+        "military spending since 1993 if we",
+        "exclude the United States: China,",
+        "Russia, Saudi Arabia, and India.",
     ];
 
     create_annotations_gdp(
@@ -605,9 +605,9 @@ function transition_spending_chart_1() {
     // Define array of annotation lines
     let text_lines = [
         "These are the top four countries in",
-        "military spending since 1993 without",
-        "the United States: China, Russia, India,",
-        "and Saudi Arabia.",
+        "military spending since 1993 if we",
+        "exclude the United States: China,",
+        "Russia, Saudi Arabia, and India.",
     ];
 
     create_annotations_gdp(
