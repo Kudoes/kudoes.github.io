@@ -1,6 +1,5 @@
-// VARIABLES
-// Indicate which "slide" or "position" we're on
 let slide = 1;
+let source_or_vis = "vis";
 
 let data_dict = {
     total_spending: {},
@@ -241,7 +240,7 @@ async function create_spending_chart() {
             return y(d.TotalSpending);
         })
         .transition()
-        .delay(500)
+        .delay(750)
         .attr("pointer-events", "auto");
 
     // Plot US without transitions
@@ -574,7 +573,7 @@ function transition_spending_chart_1() {
             return y(d.TotalSpending);
         })
         .transition()
-        .delay(500)
+        .delay(750)
         .attr("pointer-events", "auto");
 
     path = svg
@@ -844,7 +843,7 @@ function create_spending_chart_2(reverse = false) {
                 return y(d.TotalSpending);
             })
             .transition()
-            .delay(500)
+            .delay(750)
             .attr("pointer-events", "auto");
 
         let path = svg
@@ -920,7 +919,7 @@ function create_spending_chart_2(reverse = false) {
                 return y(d.TotalSpending);
             })
             .transition()
-            .delay(500)
+            .delay(750)
             .attr("pointer-events", "auto");
 
         path = svg
@@ -990,12 +989,59 @@ function disable_buttons(time, last = false) {
 }
 
 function handleClick(event, id) {
-    if (id == "next") {
-        slide += 1;
-    } else if (id == "previous") {
-        slide -= 1;
+    if (id == "sources") {
+        if (source_or_vis == "vis") {
+            // Display Source Page
+            d3.select("#main-page")
+                //.style("opacity", 1)
+                .transition()
+                .on("end", function (d) {
+                    d3.select(this).style("display", "none");
+                    d3.select(".sources-container")
+                        .transition()
+                        .style("display", "block")
+                        .on("end", function (d) {
+                            d3.select(this)
+                                .transition()
+                                .duration(500)
+                                .style("opacity", 1);
+                        });
+                })
+                .duration(1000)
+                .style("opacity", 0);
 
-        if (slide == 1 || slide == 3) {
+            document.getElementById("sources").innerHTML = "Home";
+
+            source_or_vis = "source";
+        } else {
+            // Display Source Page
+            d3.select(".sources-container")
+                .transition()
+                .on("end", function (d) {
+                    d3.select(this).style("display", "none");
+                    d3.select("#main-page")
+                        .transition()
+                        .style("display", "block")
+                        .on("end", function (d) {
+                            d3.select(this)
+                                .transition()
+                                .duration(500)
+                                .style("opacity", 1);
+                        });
+                })
+                .duration(1000)
+                .style("opacity", 0);
+
+            document.getElementById("sources").innerHTML = "Sources";
+
+            source_or_vis = "vis";
+        }
+
+        document.getElementById("next").disabled = false;
+    } else {
+        if (id == "restart") {
+            slide = 1;
+
             d3.select(".main-svg")
                 .selectAll("*")
                 .attr("opacity", 1)
@@ -1003,293 +1049,316 @@ function handleClick(event, id) {
                 .on("end", function (d) {
                     d3.select(this).remove();
                 })
-                .duration(1000)
+                .duration(750)
                 .attr("opacity", 0);
-        }
-    }
-    console.log(slide);
 
-    if (slide == 1) {
-        document.getElementById("current-slide").innerHTML = slide;
-
-        document.getElementById("previous").disabled = true;
-
-        document.getElementById("vis-title").textContent =
-            "United States Defence Spending vs. Rest of the World (2018)";
-
-        let bodyText =
-            "The US has historically allocated a very large proportion of its total GDP towards military expenditure when compared to the rest of the world. For example, in 2018 the United States" +
-            " alone accounted for approximately 36.4% of total military expenditures. <br /><br /> In the below pie chart, the total defense spending of the United States is compared to <b>the rest of the world " +
-            "combined</b> in 2018.";
-        document.getElementById("explanation-text").innerHTML = bodyText;
-
-        if (id == "previous") {
             d3.selectAll(".tooltip").remove();
+            d3.selectAll(".tooltip-pie");
+            document.getElementById("next").disabled = false;
+        } else if (id == "next") {
+            slide += 1;
+        } else if (id == "previous") {
+            slide -= 1;
+
+            if (slide == 1 || slide == 3) {
+                d3.select(".main-svg")
+                    .selectAll("*")
+                    .attr("opacity", 1)
+                    .transition()
+                    .on("end", function (d) {
+                        d3.select(this).remove();
+                    })
+                    .duration(1000)
+                    .attr("opacity", 0);
+            }
         }
-        create_pie_chart_svg();
-    } else if (slide == 2) {
-        disable_buttons(4000);
-        document.getElementById("current-slide").innerHTML = slide;
 
-        document.getElementById("explanation-title").innerHTML =
-            "Top 5 Countries in Military Expenditure";
+        if (slide == 1) {
+            document.getElementById("current-slide").innerHTML = slide;
 
-        document.getElementById("vis-title").textContent =
-            "Total Defense Spending in Billions USD vs. Year (1993 - 2018)";
+            document.getElementById("previous").disabled = true;
 
-        let bodyText =
-            "The other top four military-spending countries as of 2018 were China, Saudi Arabia, Russia and India. Notice that China appears to be spending significantly more than the other three as of the last two decades." +
-            " Note that data from only as far back as 1993 was used in this particular plot because total defense spending data for Russia (historically the United States' military rival) only became available from 1993 onwards.";
+            document.getElementById("vis-title").textContent =
+                "United States Defense Spending vs. Rest of the World (2018)";
 
-        // NEXT SLIDE: When comparing total military spending to other countries in the world, the US has historically outspent them all by a significant margin.
-        //     "Overall defence budget as a percentage of GDP has been decreasing since 1960. However, notice how there are some periods of dramatic increase/decrease." +
-        //     " We are going to analyze key time periods of particular interest to understand how events unfolding at the time affected the US defence budget.";
-        document.getElementById("explanation-text").innerHTML = bodyText;
+            document.getElementById("explanation-title").innerHTML =
+                "United States Defense Spending";
 
-        if (id == "next") {
-            destroy_pie_chart();
-            create_spending_chart();
-        } else {
-            transition_spending_chart_1();
-        }
-    } else if (slide == 3) {
-        d3.selectAll(".point").attr("pointer-events", "none");
-        disable_buttons(3000);
-        document.getElementById("current-slide").innerHTML = slide;
+            let bodyText =
+                "The US has historically allocated a very large proportion of its total GDP towards military expenditure when compared to the rest of the world. For example, in 2018 the United States" +
+                " alone accounted for approximately 36.4% of total military expenditures. <br /><br /> In the below pie chart, the total defense spending of the United States is compared to <b>the rest of the world " +
+                "combined</b> in 2018.";
+            document.getElementById("explanation-text").innerHTML = bodyText;
 
-        document.getElementById("explanation-title").innerHTML =
-            "Top 5 Countries in Military Expenditure";
+            if (id == "previous") {
+                d3.selectAll(".tooltip").remove();
+            }
+            create_pie_chart_svg();
+        } else if (slide == 2) {
+            disable_buttons(4000);
+            document.getElementById("current-slide").innerHTML = slide;
 
-        document.getElementById("vis-title").textContent =
-            "Total Defense Spending in Billions USD vs. Year (1993 - 2018)";
+            document.getElementById("explanation-title").innerHTML =
+                "Top 5 Countries in Military Expenditure";
 
-        let bodyText =
-            "Now, adding the United States to the picture shows the sheer magnitude by which the United States out-spends even the most heavily spending other countries. When analyzing overall spending, " +
-            "it indeed seems as if most countries have increased military expenditure over the years. However, this does not take into account the overall GDP, which (as it increases over the years) allows countries " +
-            "to naturally invest more total money into defense.";
+            document.getElementById("vis-title").textContent =
+                "Total Defense Spending in Billions USD vs. Year (1993 - 2018)";
 
-        // NEXT SLIDE: When comparing total military spending to other countries in the world, the US has historically outspent them all by a significant margin.
-        //     "Overall defence budget as a percentage of GDP has been decreasing since 1960. However, notice how there are some periods of dramatic increase/decrease." +
-        //     " We are going to analyze key time periods of particular interest to understand how events unfolding at the time affected the US defence budget.";
-        document.getElementById("explanation-text").innerHTML = bodyText;
+            let bodyText =
+                "The other top four military-spending countries as of 2018 were China, Saudi Arabia, Russia and India. Notice that China appears to be spending significantly more than the other three as of the last two decades." +
+                " Note that data from only as far back as 1993 was used in this particular plot because total defense spending data for Russia (historically the United States' main military rival) only became available from 1993 onwards.";
 
-        if (id == "previous") {
-            create_spending_chart_2(true);
-        } else {
-            create_spending_chart_2();
-        }
-    } else if (slide == 4) {
-        document.getElementById("current-slide").innerHTML = slide;
-        // Title of Plot
-        document.getElementById("vis-title").textContent =
-            "United States Defence Spending as % of GDP (1960 - 2018)";
+            // NEXT SLIDE: When comparing total military spending to other countries in the world, the US has historically outspent them all by a significant margin.
+            //     "Overall defense budget as a percentage of GDP has been decreasing since 1960. However, notice how there are some periods of dramatic increase/decrease." +
+            //     " We are going to analyze key time periods of particular interest to understand how events unfolding at the time affected the US defense budget.";
+            document.getElementById("explanation-text").innerHTML = bodyText;
 
-        // Paragraph Title
-        document.getElementById("explanation-title").innerHTML =
-            "Overview of US Military Expenditure as a Percentage of GDP";
+            if (id == "next") {
+                destroy_pie_chart();
+                create_spending_chart();
+            } else {
+                transition_spending_chart_1();
+            }
+        } else if (slide == 3) {
+            d3.selectAll(".point").attr("pointer-events", "none");
+            disable_buttons(3000);
+            document.getElementById("current-slide").innerHTML = slide;
 
-        // Paragraph Text
-        let bodyText =
-            " We are more interested in defence spending as a <b>percentage</b> of GDP over the years. Notice that this chart, when compared to the last, actually shows a drop of defense spending as a percentage of GDP as " +
-            "the years go on, yet there are some interesting dips/rises at certain points which we may want to investigate further. Thus, we will be analyzing the United States' defense spending as a percentage of GDP " +
-            " from 1960 to 2018. Furthermore, we will be analyzing various international events of import between 1960 and 2018 and how they may have impacted the US defense budget.";
-        document.getElementById("explanation-text").innerHTML = bodyText;
+            document.getElementById("explanation-title").innerHTML =
+                "Top 5 Countries in Military Expenditure";
 
-        if (id == "next") {
-            disable_buttons(4500);
-            destroy_svg_spending_chart();
-            create_gdp_line_chart_1();
-        } else {
+            document.getElementById("vis-title").textContent =
+                "Total Defense Spending in Billions USD vs. Year (1993 - 2018)";
+
+            let bodyText =
+                "Now, adding the United States to the picture shows the sheer magnitude by which the United States out-spends even the most heavily spending other countries. When analyzing overall spending, " +
+                "it indeed seems as if most countries have increased military expenditure over the years. However, this does not take into account the overall GDP, which (as it increases over the years) allows countries " +
+                "to naturally invest more total money into defense.";
+
+            // NEXT SLIDE: When comparing total military spending to other countries in the world, the US has historically outspent them all by a significant margin.
+            //     "Overall defense budget as a percentage of GDP has been decreasing since 1960. However, notice how there are some periods of dramatic increase/decrease." +
+            //     " We are going to analyze key time periods of particular interest to understand how events unfolding at the time affected the US defense budget.";
+            document.getElementById("explanation-text").innerHTML = bodyText;
+
+            if (id == "previous") {
+                create_spending_chart_2(true);
+            } else {
+                create_spending_chart_2();
+            }
+        } else if (slide == 4) {
+            document.getElementById("current-slide").innerHTML = slide;
+            // Title of Plot
+            document.getElementById("vis-title").textContent =
+                "United States Defense Spending as % of GDP (1960 - 2018)";
+
+            // Paragraph Title
+            document.getElementById("explanation-title").innerHTML =
+                "Overview of US Military Expenditure as a Percentage of GDP";
+
+            // Paragraph Text
+            let bodyText =
+                "We are more interested in defense spending as a <b>percentage</b> of GDP over the years. Notice that this chart, when compared to the last, actually shows a drop of defense spending as a percentage of GDP as " +
+                "the years go on, yet there are some interesting dips/rises at certain points which we may want to investigate further. Thus, we will be analyzing the United States' defense spending as a percentage of GDP " +
+                " from 1960 to 2018 by analyzing various international events of import between 1960 and 2018 and how they may have impacted the US defense budget.";
+            document.getElementById("explanation-text").innerHTML = bodyText;
+
+            if (id == "next") {
+                disable_buttons(4500);
+                destroy_svg_spending_chart();
+                create_gdp_line_chart_1();
+            } else {
+                disable_buttons(2500);
+                create_gdp_line_chart_1(true);
+            }
+        } else if (slide == 5) {
             disable_buttons(2500);
-            create_gdp_line_chart_1(true);
+
+            document.getElementById("current-slide").innerHTML = slide;
+            // Title of Plot
+            document.getElementById("vis-title").textContent =
+                "United States Defense Spending as % of GDP (1960 - 1967)";
+
+            // Paragraph Title
+            document.getElementById("explanation-title").innerHTML =
+                "Entering the Vietnam War";
+
+            // Paragraph Text
+            let bodyText =
+                "In 1965, the US increased their involvement in the Vietnam War. President Johnson ordered a three-year bombing campaign (Operation Rolling Thunder) " +
+                "in Northern Vietnam and deployed combat troops to the region for the first time. As a result, defense spending increases dramatically over " +
+                "the next two years until it reaches 9.06% of the GDP in 1967. Note that this is the highest amount of military expenditure as a percentage of GDP during the entire 58-year" +
+                " period being analyzed.";
+            document.getElementById("explanation-text").innerHTML = bodyText;
+
+            //create_spending_chart_2();
+
+            // Bring up the data points
+
+            if (id == "next") {
+                create_gdp_line_chart_2();
+            } else {
+                create_gdp_line_chart_2(true);
+            }
+
+            // Create the annotation
+        } else if (slide == 6) {
+            disable_buttons(2500);
+
+            document.getElementById("current-slide").innerHTML = slide;
+            // Title of Plot
+            document.getElementById("vis-title").textContent =
+                "United States Defense Spending as % of GDP (1968 - 2018)";
+
+            // Paragraph Title
+            document.getElementById("explanation-title").innerHTML =
+                "President Nixon Gradually Decreases Involvement in Vietnam";
+
+            // Paragraph Text
+            let bodyText =
+                "By 1969, the Vietnam War was very unpopular with the general US public. President Nixon sought to reduce US participation, which " +
+                "he gradually did until the Paris Peace Accords were signed in 1973 upon which direct US involvement in the Vietnam War ended. During the 1970s, the US defense budget has been argued by some to have been" +
+                " perhaps excessively low. This led to concerns at the time about the deteriorating quality of US military forces, equipment, and increased worries about competition from the Soviet Union. These reduced defense budgets began" +
+                " from approximately 1967 and lasted until 1981 when Ronald Reagan began his presidency.";
+            document.getElementById("explanation-text").innerHTML = bodyText;
+
+            if (id == "next") {
+                create_gdp_line_chart_3();
+            } else {
+                create_gdp_line_chart_3(true);
+            }
+        } else if (slide == 7) {
+            disable_buttons(2500);
+
+            document.getElementById("current-slide").innerHTML = slide;
+            // Title of Plot
+            document.getElementById("vis-title").textContent =
+                "United States Defense Spending as % of GDP (1981 - 1989)";
+
+            // Paragraph Title
+            document.getElementById("explanation-title").innerHTML =
+                "President Reagan's Defense Buildup and the Cold War";
+
+            // Paragraph Text
+            let bodyText =
+                "When Ronald Reagan won the presidency in 1980, he had a very different approach towards the defense budget than his predecessors. At the time, there were serious concerns about the deteriorating quality of" +
+                " the US military. Reagan's policies heavily emphasized the importance of building up US military capabilities to win the Cold War. This included purchasing more military equipment and increasing " +
+                "R&D budgets for developing new military technology. As a result of these policies, the defense budget increased drastically under his presidency, particularly during his first term.";
+
+            // Talk in annotations about how he did begin reducing his military spending over his second term
+            // Also discuss potentially how the cold war effected this spending
+            document.getElementById("explanation-text").innerHTML = bodyText;
+
+            // Now de-construct the previous chart elements
+
+            if (id == "next") {
+                create_gdp_line_chart_4();
+            } else {
+                create_gdp_line_chart_4(true);
+            }
+        } else if (slide == 8) {
+            disable_buttons(2500);
+
+            document.getElementById("current-slide").innerHTML = slide;
+            // Title of Plot
+            document.getElementById("vis-title").textContent =
+                "United States Defense Spending as % of GDP (1990 - 2000)";
+
+            // Paragraph Title
+            document.getElementById("explanation-title").innerHTML =
+                "Post-Cold War Budget Cuts";
+
+            // Paragraph Text
+            let bodyText =
+                "After the fall of the Soviet Union in 1991 and subsequent end of the Cold War, there was no longer a need for such heavy investment in defense. Beginning with President George H. W. Bush and continuing" +
+                " with President Clinton until 2001, the US saw defense budgets relative to GDP fall dramatically. The era of peace allowed for an increased emphasis on balancing the federal budget. " +
+                "Thus, President Clinton's policies during his tenure as president involved reducing overall federal spending. As a result, defense spending fell dramatically during the 1990s.";
+
+            // defense spending fell almost year-on-year to a 68-year low of 2.91% of the GDP in 1999 - annotate
+            document.getElementById("explanation-text").innerHTML = bodyText;
+
+            if (id == "next") {
+                create_gdp_line_chart_5();
+            } else {
+                create_gdp_line_chart_5(true);
+            }
+        } else if (slide == 9) {
+            disable_buttons(2500);
+
+            document.getElementById("current-slide").innerHTML = slide;
+            // Title of Plot
+            document.getElementById("vis-title").textContent =
+                "United States Defense Spending as % of GDP (2001 - 2008)";
+
+            // Paragraph Title
+            document.getElementById("explanation-title").innerHTML =
+                "9/11: Wars in Iraq and Afghanistan";
+
+            // Paragraph Text
+            let bodyText =
+                "After the 9/11 attacks, President Bush launched his 'War on Terror' that began the Afghanistan War in 2001 and the Iraq War in 2003. Naturally, this resulted in" +
+                " dramatic increases in defense spending over the course of his presidency for modernizing weapons, many of which had grown outdated during the last ten years as a result of" +
+                " reduced military spending during the 1990s.";
+
+            // defense spending fell almost year-on-year to a 68-year low of 2.91% of the GDP in 1999 - annotate
+            document.getElementById("explanation-text").innerHTML = bodyText;
+
+            if (id == "next") {
+                create_gdp_line_chart_6();
+            } else {
+                create_gdp_line_chart_6(true);
+            }
+        } else if (slide == 10) {
+            disable_buttons(2500);
+
+            document.getElementById("current-slide").innerHTML = slide;
+            // Title of Plot
+            document.getElementById("vis-title").textContent =
+                "United States Defense Spending as % of GDP (2009 - 2018)";
+
+            // Paragraph Title
+            document.getElementById("explanation-title").innerHTML =
+                "2008 Recession and the End of the Iraq War";
+
+            // Paragraph Text
+            let bodyText =
+                "Under President Obama's presidency the Iraq war ended in 2011 with the withdrawal of all US combat troops. Furthermore, as a result of the " +
+                "2008 recession, defense was one of the many sectors where federal spending was reduced. By the end of President Obama's tenure, defense spending as a percentage" +
+                " of GDP had reached Clinton-era levels - significantly reduced from Bush-era defense spending.";
+
+            // defense spending fell almost year-on-year to a 68-year low of 2.91% of the GDP in 1999 - annotate
+            document.getElementById("explanation-text").innerHTML = bodyText;
+
+            //create_gdp_line_chart_7();
+            if (id == "next") {
+                create_gdp_line_chart_7();
+            } else {
+                create_gdp_line_chart_7(true);
+            }
+        } else if (slide == 11) {
+            disable_buttons(2000, true);
+            document.getElementById("next").disabled = true;
+
+            document.getElementById("current-slide").innerHTML = slide;
+
+            // Title of Plot
+            document.getElementById("vis-title").textContent =
+                "United States Defense Spending as % of GDP (1960 - 2018)";
+
+            // Paragraph Title
+            document.getElementById("explanation-title").innerHTML =
+                "Conclusion";
+
+            // Paragraph Text
+            let bodyText =
+                "Thus, through this visualization, we were able to better understand the historic context behind US defense spending, and how it compares to other countries across the world." +
+                " To start over, please press the 'Restart' button on the top-right of the page. <br><br> The sources for historical information and the data can be accessed by clicking on the 'Sources' button on the" +
+                " top-left of the page.";
+
+            // defense spending fell almost year-on-year to a 68-year low of 2.91% of the GDP in 1999 - annotate
+            document.getElementById("explanation-text").innerHTML = bodyText;
+
+            create_gdp_line_chart_8();
         }
-    } else if (slide == 5) {
-        disable_buttons(2500);
-
-        document.getElementById("current-slide").innerHTML = slide;
-        // Title of Plot
-        document.getElementById("vis-title").textContent =
-            "United States Defence Spending as % of GDP (1960 - 1967)";
-
-        // Paragraph Title
-        document.getElementById("explanation-title").innerHTML =
-            "Entering the Vietnam War";
-
-        // Paragraph Text
-        let bodyText =
-            "In 1965, the US increased their involvement in the Vietnam War. In 1965, President Johnson ordered a three-year bombing campaign (Operation Rolling Thunder) " +
-            "in Northern Vietnam and deployed combat troops to Vietnam. This escalation required higher military spending. As a result, defense spending increases dramatically over " +
-            "the next two years until it reaches 9.06% of the GDP in 1967. Note that this is the highest amount of military expenditure as a percentage of GDP during the entire 58-year" +
-            " period being analyzed.";
-        document.getElementById("explanation-text").innerHTML = bodyText;
-
-        //create_spending_chart_2();
-
-        // Bring up the data points
-
-        if (id == "next") {
-            create_gdp_line_chart_2();
-        } else {
-            create_gdp_line_chart_2(true);
-        }
-
-        // Create the annotation
-    } else if (slide == 6) {
-        disable_buttons(2500);
-
-        document.getElementById("current-slide").innerHTML = slide;
-        // Title of Plot
-        document.getElementById("vis-title").textContent =
-            "United States Defence Spending as % of GDP (1968 - 2018)";
-
-        // Paragraph Title
-        document.getElementById("explanation-title").innerHTML =
-            "President Nixon Gradually Decreases Involvement in Vietnam";
-
-        // Paragraph Text
-        let bodyText =
-            "By 1969, the Vietnam War was very unpopular with the general US public. President Nixon sought to reduce US participation, which " +
-            "he gradually did until the Paris Peace Accords were signed in 1973 upon which direct US involvement in the Vietnam War ended. During the 1970s, the US defense budget has been argued by some to have been" +
-            " perhaps excessively low. This led to concerns at the time about the deteriorating quality of the US military forces, equipment, and competition from the Soviet Union. These reduced defense budgets began" +
-            " from approximately 1967 and lasted until 1981 when Ronald Reagan began his presidency.";
-        document.getElementById("explanation-text").innerHTML = bodyText;
-
-        if (id == "next") {
-            create_gdp_line_chart_3();
-        } else {
-            create_gdp_line_chart_3(true);
-        }
-    } else if (slide == 7) {
-        disable_buttons(2500);
-
-        document.getElementById("current-slide").innerHTML = slide;
-        // Title of Plot
-        document.getElementById("vis-title").textContent =
-            "United States Defence Spending as % of GDP (1981 - 1989)";
-
-        // Paragraph Title
-        document.getElementById("explanation-title").innerHTML =
-            "President Reagan's Defense Buildup and the Cold War";
-
-        // Paragraph Text
-        let bodyText =
-            "When Ronald Reagan won the presidency in 1980, he had a very different approach towards the defense budget than his predecessors. At the time, there were serious concerns about the deteriorating quality of" +
-            " the US military. Reagan's policies heavily emphasized the importance of building up US military capabilities to win the Cold War. This included purchasing more military equipment and increasing " +
-            "R&D budgets for developing new military technology. As a result of these policies, the defense budget increased drastically under his presidency, particularly during his first term.";
-
-        // Talk in annotations about how he did begin reducing his military spending over his second term
-        // Also discuss potentially how the cold war effected this spending
-        document.getElementById("explanation-text").innerHTML = bodyText;
-
-        // Now de-construct the previous chart elements
-
-        if (id == "next") {
-            create_gdp_line_chart_4();
-        } else {
-            create_gdp_line_chart_4(true);
-        }
-    } else if (slide == 8) {
-        disable_buttons(2500);
-
-        document.getElementById("current-slide").innerHTML = slide;
-        // Title of Plot
-        document.getElementById("vis-title").textContent =
-            "United States Defence Spending as % of GDP (1990 - 2000)";
-
-        // Paragraph Title
-        document.getElementById("explanation-title").innerHTML =
-            "Post-Cold War Budget Cuts";
-
-        // Paragraph Text
-        let bodyText =
-            "After the fall of the Soviet Union in 1991 and subsequent end of the Cold War, there was no longer a need for such heavy investment in defense. Beginning with President George H. W. Bush and continuing" +
-            " with President Clinton until 2001, the US saw defense budgets relative to GDP fall dramatically. The era of peace allowed for an increased emphasis on balancing the federal budget. " +
-            "Thus, President Clinton's policies during his tenure as president involved reducing overall federal spending over his two terms as president. As a result, defense spending fell dramatically during the 1990s.";
-
-        // defense spending fell almost year-on-year to a 68-year low of 2.91% of the GDP in 1999 - annotate
-        document.getElementById("explanation-text").innerHTML = bodyText;
-
-        if (id == "next") {
-            create_gdp_line_chart_5();
-        } else {
-            create_gdp_line_chart_5(true);
-        }
-    } else if (slide == 9) {
-        disable_buttons(2500);
-
-        document.getElementById("current-slide").innerHTML = slide;
-        // Title of Plot
-        document.getElementById("vis-title").textContent =
-            "United States Defence Spending as % of GDP (2001 - 2008)";
-
-        // Paragraph Title
-        document.getElementById("explanation-title").innerHTML =
-            "9/11: Wars in Iraq and Afghanistan";
-
-        // Paragraph Text
-        let bodyText =
-            "After the 9/11 attacks, President Bush launched his 'War on Terror' that began the Afghanistan War in 2001 and the Iraq War in 2003. Naturally, this resulted in" +
-            " dramatic increases in defense spending over the course of his presidency for modernizing weapons, many of which had grown outdated during the last ten years as a result of" +
-            " reduced military spending during the 1990s.";
-
-        // defense spending fell almost year-on-year to a 68-year low of 2.91% of the GDP in 1999 - annotate
-        document.getElementById("explanation-text").innerHTML = bodyText;
-
-        if (id == "next") {
-            create_gdp_line_chart_6();
-        } else {
-            create_gdp_line_chart_6(true);
-        }
-    } else if (slide == 10) {
-        disable_buttons(2500);
-
-        document.getElementById("current-slide").innerHTML = slide;
-        // Title of Plot
-        document.getElementById("vis-title").textContent =
-            "United States Defence Spending as % of GDP (2009 - 2018)";
-
-        // Paragraph Title
-        document.getElementById("explanation-title").innerHTML =
-            "2008 Recession and the End of the Iraq War";
-
-        // Paragraph Text
-        let bodyText =
-            "Under President Obama's presidency the Iraq war ended in 2011 with the withdrawal of all US combat troops. Furthermore, as a result of the " +
-            "2008 recession, defense was one of the many sectors where federal spending was reduced. By the end of President Obama's tenure, defense spending as a percentage" +
-            " of GDP had reached Clinton-era levels - significantly reduced from Bush-era defense spending.";
-
-        // defense spending fell almost year-on-year to a 68-year low of 2.91% of the GDP in 1999 - annotate
-        document.getElementById("explanation-text").innerHTML = bodyText;
-
-        //create_gdp_line_chart_7();
-        if (id == "next") {
-            create_gdp_line_chart_7();
-        } else {
-            create_gdp_line_chart_7(true);
-        }
-    } else if (slide == 11) {
-        disable_buttons(2000, true);
-        document.getElementById("next").disabled = true;
-
-        document.getElementById("current-slide").innerHTML = slide;
-
-        // Title of Plot
-        document.getElementById("vis-title").textContent =
-            "United States Defence Spending as % of GDP (1960 - 2018)";
-
-        // Paragraph Title
-        document.getElementById("explanation-title").innerHTML = "The End";
-
-        // Paragraph Text
-        let bodyText =
-            "Hopefully by this point users have a better understanding of US defense spending over the years, how it compares to other countries, and how it has trended as a function of total GDP over the years." +
-            " To start over, please press the 'Restart' button on the top-right of the page. <br><br> The sources for historical information and the data can be accessed by clicking on the 'Sources' button on the" +
-            " top-left of the page.";
-
-        // defense spending fell almost year-on-year to a 68-year low of 2.91% of the GDP in 1999 - annotate
-        document.getElementById("explanation-text").innerHTML = bodyText;
-
-        create_gdp_line_chart_8();
     }
 }
 function create_annotations_gdp(
@@ -1429,34 +1498,6 @@ function create_gdp_line_chart_8() {
 
 function create_gdp_line_chart_7(reverse = false) {
     if (reverse) {
-        //console.log(d3.select(".annotation-line4"));
-        //console.log(d3.select(".annotation-line4"));
-        // d3.selectAll(".annotations")
-        //     .transition()
-        //     .duration(500)
-        //     .attr("opacity", 0);
-
-        // d3.select(".annotation-line4")
-        //     .transition()
-        //     .on("end", function (d) {
-        //         d3.select(this).remove();
-        //     })
-        //     .delay(500)
-        //     .duration(500)
-        //     .attr("x2", 780);
-
-        // d3.select(".annotation-line3")
-        //     .transition()
-        //     .on("end", function (d) {
-        //         d3.select(this).remove();
-        //     })
-        //     .delay(1000)
-        //     .duration(500)
-        //     .attr("x2", 900)
-        //     .attr("y2", 265);
-
-        // d3.selectAll(".annotation-g").transition().delay(2000).remove();
-
         // Select the SVG container
         let svg = d3.select(".main-svg").select(".plot-g");
 
@@ -1493,7 +1534,7 @@ function create_gdp_line_chart_7(reverse = false) {
                     .delay(1250)
                     .duration(1000)
                     .style("opacity", 1)
-                    .attr("pointer-events", "auto");
+                    .attr("pointer-events", "none");
             }
         });
 
@@ -1617,7 +1658,7 @@ function create_gdp_line_chart_7(reverse = false) {
                     .duration(1000)
                     .attr("r", 5)
                     .attr("cy", (d) => y(d.PercGDP))
-                    .attr("pointer-events", "auto");
+                    .attr("pointer-events", "none");
             }
         });
 
@@ -1732,7 +1773,7 @@ function create_gdp_line_chart_6(reverse = false) {
                     .delay(1250)
                     .duration(1000)
                     .style("opacity", 1)
-                    .attr("pointer-events", "auto");
+                    .attr("pointer-events", "none");
             }
         });
 
@@ -1850,7 +1891,7 @@ function create_gdp_line_chart_6(reverse = false) {
                     .duration(1000)
                     .attr("r", 5)
                     .attr("cy", (d) => y(d.PercGDP))
-                    .attr("pointer-events", "auto");
+                    .attr("pointer-events", "none");
             }
         });
 
@@ -1959,7 +2000,7 @@ function create_gdp_line_chart_5(reverse = false) {
                     .delay(1250)
                     .duration(1000)
                     .style("opacity", 1)
-                    .attr("pointer-events", "auto");
+                    .attr("pointer-events", "none");
             }
         });
 
@@ -2083,7 +2124,7 @@ function create_gdp_line_chart_5(reverse = false) {
                     .duration(1000)
                     .attr("r", 5)
                     .attr("cy", (d) => y(d.PercGDP))
-                    .attr("pointer-events", "auto");
+                    .attr("pointer-events", "none");
             }
         });
 
@@ -2186,7 +2227,7 @@ function create_gdp_line_chart_4(reverse = false) {
                     .delay(1250)
                     .duration(1000)
                     .style("opacity", 1)
-                    .attr("pointer-events", "auto");
+                    .attr("pointer-events", "none");
             }
         });
 
@@ -2232,8 +2273,7 @@ function create_gdp_line_chart_4(reverse = false) {
         let text_lines = [
             "On average, defense spending during the",
             "Reagan administration reached levels not",
-            "seen since the height of the Vietnam",
-            "War",
+            "seen since the Vietnam War",
         ];
 
         create_annotations_gdp(line1, line2, text_lines, 500, "Increase", 2250);
@@ -2289,7 +2329,6 @@ function create_gdp_line_chart_4(reverse = false) {
 
         // Remove unnecessary points
         let points = svg.selectAll(".point");
-        console.log(points);
         points.each(function (d) {
             if (years.includes(d.Year.getFullYear())) {
                 d3.select(this)
@@ -2298,7 +2337,7 @@ function create_gdp_line_chart_4(reverse = false) {
                     .duration(1000)
                     .attr("r", 5)
                     .attr("cy", (d) => y(d.PercGDP))
-                    .attr("pointer-events", "auto");
+                    .attr("pointer-events", "none");
             }
         });
 
@@ -2400,7 +2439,7 @@ function create_gdp_line_chart_3(reverse = false) {
                     .delay(1250)
                     .duration(1000)
                     .style("opacity", 1)
-                    .attr("pointer-events", "auto");
+                    .attr("pointer-events", "none");
             }
         });
 
@@ -2513,7 +2552,7 @@ function create_gdp_line_chart_3(reverse = false) {
                     .duration(1000)
                     .attr("r", 5)
                     .attr("cy", (d) => y(d.PercGDP))
-                    .attr("pointer-events", "auto");
+                    .attr("pointer-events", "none");
             }
         });
 
@@ -2623,7 +2662,7 @@ function create_gdp_line_chart_2(reverse = false) {
                     .delay(1250)
                     .duration(1000)
                     .style("opacity", 1)
-                    .attr("pointer-events", "auto");
+                    .attr("pointer-events", "none");
             }
         });
 
@@ -2701,10 +2740,7 @@ function create_gdp_line_chart_2(reverse = false) {
                     .attr("r", 0)
                     .attr("cy", (d) => y(0));
             } else {
-                d3.select(this)
-                    .transition()
-                    .delay(500)
-                    .attr("pointer-events", "auto");
+                d3.select(this).transition().attr("pointer-events", "none");
             }
         });
 
@@ -2713,7 +2749,6 @@ function create_gdp_line_chart_2(reverse = false) {
             if (d.Year.getFullYear() > 1967) {
                 d3.select(this)
                     .transition()
-                    //.delay(500)
                     .duration(1000)
                     .attr("y1", (d) => height - margin.bottom - margin.top);
             }
@@ -2921,10 +2956,10 @@ async function create_gdp_line_chart_1(reverse = false) {
                     .duration(1000)
                     .attr("r", 5)
                     .attr("cy", (d) => y(d.PercGDP))
-                    .attr("pointer-events", "auto");
+                    .attr("pointer-events", "none");
             } else {
                 d3.select(this)
-                    .attr("pointer-events", "auto")
+                    .attr("pointer-events", "none")
                     .transition()
                     .duration(500)
                     .style("opacity", 1);
@@ -3078,7 +3113,7 @@ async function create_gdp_line_chart_1(reverse = false) {
             .attr("cx", (d) => x(d.Year))
             .attr("cy", (d) => y(d.PercGDP))
             .transition()
-            .attr("pointer-events", "auto");
+            .attr("pointer-events", "none");
 
         let lines = svg
             .selectAll(".line-point")
@@ -3116,9 +3151,7 @@ function fade_data(data, years_kept) {
     });
 
     let others = d3.selectAll(".point").filter(function (d) {
-        //console.log(d.Year.getFullYear());
         if (hide_years.includes(d.Year.getFullYear())) {
-            console.log("found");
             return this;
         }
     });
@@ -3195,7 +3228,6 @@ async function create_pie_chart_svg() {
     // Add "Mouse Over" Handler
     path.on("mouseover", function (d) {
         let spending = (d.data.TotalSpending / 1000000000).toFixed(1);
-        console.log(d);
         // Add Country header to Tooltip
         tooltip
             .select(".country")
@@ -3480,6 +3512,6 @@ function destroy_pie_chart() {
         .remove();
 
     d3.transition().delay(2000).selectAll("g").remove();
-    d3.select(".tooltip-pie").remove();
+    d3.selectAll(".tooltip-pie").remove();
     d3.transition().delay(2000).selectAll(".pieText").remove();
 }
