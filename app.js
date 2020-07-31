@@ -152,9 +152,6 @@ function handleClick(event, id) {
                 "The other top four military-spending countries as of 2018 were China, Saudi Arabia, Russia and India. Notice that China appears to be spending significantly more than the other three as of the last two decades." +
                 " Note that data from only as far back as 1993 was used in this particular plot because total defense spending data for Russia (historically the United States' main military rival) only became available from 1993 onwards.";
 
-            // NEXT SLIDE: When comparing total military spending to other countries in the world, the US has historically outspent them all by a significant margin.
-            //     "Overall defense budget as a percentage of GDP has been decreasing since 1960. However, notice how there are some periods of dramatic increase/decrease." +
-            //     " We are going to analyze key time periods of particular interest to understand how events unfolding at the time affected the US defense budget.";
             document.getElementById("explanation-text").innerHTML = bodyText;
 
             if (id == "next") {
@@ -179,9 +176,6 @@ function handleClick(event, id) {
                 "it indeed seems as if most countries have increased military expenditure over the years. However, this does not take into account the overall GDP, which (as it increases over the years) allows countries " +
                 "to naturally invest more total money into defense.";
 
-            // NEXT SLIDE: When comparing total military spending to other countries in the world, the US has historically outspent them all by a significant margin.
-            //     "Overall defense budget as a percentage of GDP has been decreasing since 1960. However, notice how there are some periods of dramatic increase/decrease." +
-            //     " We are going to analyze key time periods of particular interest to understand how events unfolding at the time affected the US defense budget.";
             document.getElementById("explanation-text").innerHTML = bodyText;
 
             if (id == "previous") {
@@ -218,7 +212,7 @@ function handleClick(event, id) {
             disable_buttons(2500);
 
             document.getElementById("current-slide").innerHTML =
-                slide + " / 11"; // Title of Plot
+                slide + " / 11";
             document.getElementById("vis-title").textContent =
                 "United States Defense Spending as % of GDP (1960 - 1967)";
 
@@ -233,10 +227,6 @@ function handleClick(event, id) {
                 "the next two years until it reaches 9.06% of the GDP in 1967. Note that this is the highest amount of military expenditure as a percentage of GDP during the entire 58-year" +
                 " period being analyzed.";
             document.getElementById("explanation-text").innerHTML = bodyText;
-
-            //create_spending_chart_2();
-
-            // Bring up the data points
 
             if (id == "next") {
                 create_gdp_line_chart_2();
@@ -288,8 +278,6 @@ function handleClick(event, id) {
                 " the US military. Reagan's policies heavily emphasized the importance of building up US military capabilities to win the Cold War. This included purchasing more military equipment and increasing " +
                 "R&D budgets for developing new military technology. As a result of these policies, the defense budget increased drastically under his presidency, particularly during his first term.";
 
-            // Talk in annotations about how he did begin reducing his military spending over his second term
-            // Also discuss potentially how the cold war effected this spending
             document.getElementById("explanation-text").innerHTML = bodyText;
 
             // Now de-construct the previous chart elements
@@ -317,7 +305,6 @@ function handleClick(event, id) {
                 " with President Clinton until 2001, the US saw defense budgets relative to GDP fall dramatically. The era of peace allowed for an increased emphasis on balancing the federal budget. " +
                 "Thus, President Clinton's policies during his tenure as president involved reducing overall federal spending. As a result, defense spending fell dramatically during the 1990s.";
 
-            // defense spending fell almost year-on-year to a 68-year low of 2.91% of the GDP in 1999 - annotate
             document.getElementById("explanation-text").innerHTML = bodyText;
 
             if (id == "next") {
@@ -343,7 +330,6 @@ function handleClick(event, id) {
                 " dramatic increases in defense spending over the course of his presidency for modernizing weapons, many of which had grown outdated during the last ten years as a result of" +
                 " reduced military spending during the 1990s.";
 
-            // defense spending fell almost year-on-year to a 68-year low of 2.91% of the GDP in 1999 - annotate
             document.getElementById("explanation-text").innerHTML = bodyText;
 
             if (id == "next") {
@@ -369,7 +355,6 @@ function handleClick(event, id) {
                 "2008 recession, defense was one of the many sectors where federal spending was reduced. By the end of President Obama's tenure, defense spending as a percentage" +
                 " of GDP had reached Clinton-era levels - significantly reduced from Bush-era defense spending.";
 
-            // defense spending fell almost year-on-year to a 68-year low of 2.91% of the GDP in 1999 - annotate
             document.getElementById("explanation-text").innerHTML = bodyText;
 
             //create_gdp_line_chart_7();
@@ -398,7 +383,6 @@ function handleClick(event, id) {
                 " To start over, please press the 'Restart' button on the top-right of the page. <br><br> The sources for historical information and the data can be accessed by clicking on the 'Sources' button on the" +
                 " top-left of the page.";
 
-            // defense spending fell almost year-on-year to a 68-year low of 2.91% of the GDP in 1999 - annotate
             document.getElementById("explanation-text").innerHTML = bodyText;
 
             create_gdp_line_chart_8();
@@ -407,7 +391,6 @@ function handleClick(event, id) {
 }
 
 async function create_pie_chart_svg() {
-    // do this in main
     const data = await d3.csv("total_spending.csv", function (d) {
         return {
             Country: d["Country"],
@@ -497,7 +480,6 @@ async function create_pie_chart_svg() {
         let others = d3.selectAll(".arc").filter(function (d) {
             return current != self;
         });
-        //others.transition().attr("opacity", 0.3);
     });
 
     // "Mouse Move" Handler
@@ -670,7 +652,6 @@ function destroy_pie_chart() {
         .attr("y", 500)
         .remove();
 
-    //d3.selectAll("path").transition().attr("fill", "white");
     d3.selectAll("path")
         .transition()
         .duration(1500)
@@ -1570,8 +1551,6 @@ function destroy_svg_spending_chart() {
         .duration(500)
         .call(d3.axisBottom(x).tickValues(0));
 
-    //xAxis.transition().delay(3000).remove();
-    //yAxis.transition().delay(3000).remove();
     axisTitles.transition().delay(2000).remove();
     svg.transition().delay(3000).select(".plot-g").selectAll("*").remove();
 }
@@ -1692,8 +1671,6 @@ async function create_gdp_line_chart_1(reverse = false) {
             years.push(index);
         }
 
-        //fade_data(data.concat, years);
-
         let tooltip = d3.select(".tooltip");
 
         // Remove unnecessary points
@@ -1736,16 +1713,13 @@ async function create_gdp_line_chart_1(reverse = false) {
             .delay(3000)
             .selectAll("*")
             .remove();
-        //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
         let svg = d3.select(".main-svg").select(".plot-g");
+
         // Add the X and Y axis
         // The y-axis
         let yAxis = d3.select(".main-svg").select(".yAxis-g");
 
         yAxis
-            //.append("g")
-            //.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-            //.call(d3.axisLeft(y2).ticks(0))
             .transition()
             .delay(2500)
             .duration(500)
@@ -1757,9 +1731,6 @@ async function create_gdp_line_chart_1(reverse = false) {
         let xAxis = d3
             .select(".main-svg")
             .select(".xAxis-g")
-            //.append("g")
-            //.attr("transform", "translate(" + margin.left + "," + translate + ")")
-            //.call(d3.axisBottom(x2).ticks(0))
             .transition()
             .delay(2500)
             .duration(500)
@@ -1820,7 +1791,6 @@ async function create_gdp_line_chart_1(reverse = false) {
                 let others = d3.selectAll(".point").filter(function (d) {
                     return current != this;
                 });
-                //others.transition().duration(500).attr("fill", "grey");
                 // Add Country header to Tooltip
                 tooltip
                     .select(".country")
@@ -1888,7 +1858,6 @@ async function create_gdp_line_chart_1(reverse = false) {
         // Make tooltip
         let tooltip = d3.select(".tooltip");
     }
-    //enable_mouse_events();
 }
 
 function create_gdp_line_chart_2(reverse = false) {
@@ -1943,8 +1912,6 @@ function create_gdp_line_chart_2(reverse = false) {
         for (let index = 1968; index < 2019; index++) {
             years.push(index);
         }
-
-        //fade_data(data.concat, years);
 
         // Remove unnecessary points
         let points = svg.selectAll(".point");
@@ -2063,7 +2030,6 @@ function create_gdp_line_chart_2(reverse = false) {
                 let others = d3.selectAll(".point").filter(function (d) {
                     return current != this;
                 });
-                //others.transition().duration(500).attr("fill", "grey");
                 // Add Country header to Tooltip
                 tooltip
                     .select(".country")
