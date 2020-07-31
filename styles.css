@@ -16,21 +16,21 @@ body {
 
 button {
     background-color: #e63946;
-    border: none;
     color: white;
     padding: 10px 25px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    border: solid 2px #e63946;
     cursor: pointer;
+    border: 2px solid black;
+    border-radius: 5px;
 }
 
 button:hover {
     background-color: #c41a28;
-    border-color: white;
 }
+
 .btn-container {
     padding: 0.5rem 0 0.5rem 0;
     background-color: #a8dadc;
@@ -45,9 +45,8 @@ button:hover {
     float: left;
 }
 
-#current-slide {
+.btn:disabled {
     background-color: #b17e82;
-    border: none;
     color: white;
     padding: 10px 25px;
     text-align: center;
@@ -55,10 +54,6 @@ button:hover {
     display: inline-block;
     font-size: 16px;
     cursor: auto;
-}
-
-#current-slide:hover {
-    background-color: #b17e82;
 }
 
 .active {
@@ -100,10 +95,6 @@ button:hover {
     justify-content: center;
 }
 
-.buttons {
-    padding: 1rem;
-}
-
 .explanation {
     width: 63%;
     height: 10rem;
@@ -137,7 +128,7 @@ hr {
     box-shadow: 2px 2px 2px 2px #999999;
     color: black;
     font-size: 14px;
-    padding: 10px;
+    padding: 5px;
     text-align: left;
     opacity: 0;
     border: solid 1px black;
