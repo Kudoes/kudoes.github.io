@@ -9,10 +9,6 @@ html {
     font-family: "Segoe UI", Arial, Helvetica, sans-serif;
 }
 
-#main-page {
-    display: block;
-}
-
 body {
     margin: 0px 0px 0px 0px;
     background-color: #f1faee;
@@ -47,6 +43,7 @@ button:hover {
 .btn {
     margin: 10px 10px 0 10px;
     float: left;
+    font-size: 13px;
 }
 
 .btn:disabled {
@@ -87,6 +84,16 @@ button:hover {
 
 #explanation-title {
     margin-block-end: 10px;
+}
+
+.svg-container {
+    border: 2px solid black;
+    border-style: dotted;
+    width: 75%;
+    margin-top: 1.2rem;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
 }
 
 .explanation {
