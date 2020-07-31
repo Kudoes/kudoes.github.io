@@ -1074,7 +1074,8 @@ function handleClick(event, id) {
         }
 
         if (slide == 1) {
-            document.getElementById("current-slide").innerHTML = slide;
+            document.getElementById("current-slide").innerHTML =
+                slide + " / 11";
 
             document.getElementById("previous").disabled = true;
 
@@ -1096,7 +1097,8 @@ function handleClick(event, id) {
             create_pie_chart_svg();
         } else if (slide == 2) {
             disable_buttons(4000);
-            document.getElementById("current-slide").innerHTML = slide;
+            document.getElementById("current-slide").innerHTML =
+                slide + " / 11";
 
             document.getElementById("explanation-title").innerHTML =
                 "Top 5 Countries in Military Expenditure";
@@ -1122,8 +1124,8 @@ function handleClick(event, id) {
         } else if (slide == 3) {
             d3.selectAll(".point").attr("pointer-events", "none");
             disable_buttons(3000);
-            document.getElementById("current-slide").innerHTML = slide;
-
+            document.getElementById("current-slide").innerHTML =
+                slide + " / 11";
             document.getElementById("explanation-title").innerHTML =
                 "Top 5 Countries in Military Expenditure";
 
@@ -1146,8 +1148,8 @@ function handleClick(event, id) {
                 create_spending_chart_2();
             }
         } else if (slide == 4) {
-            document.getElementById("current-slide").innerHTML = slide;
-            // Title of Plot
+            document.getElementById("current-slide").innerHTML =
+                slide + " / 11"; // Title of Plot
             document.getElementById("vis-title").textContent =
                 "United States Defense Spending as % of GDP (1960 - 2018)";
 
@@ -1173,8 +1175,8 @@ function handleClick(event, id) {
         } else if (slide == 5) {
             disable_buttons(2500);
 
-            document.getElementById("current-slide").innerHTML = slide;
-            // Title of Plot
+            document.getElementById("current-slide").innerHTML =
+                slide + " / 11"; // Title of Plot
             document.getElementById("vis-title").textContent =
                 "United States Defense Spending as % of GDP (1960 - 1967)";
 
@@ -1204,8 +1206,8 @@ function handleClick(event, id) {
         } else if (slide == 6) {
             disable_buttons(2500);
 
-            document.getElementById("current-slide").innerHTML = slide;
-            // Title of Plot
+            document.getElementById("current-slide").innerHTML =
+                slide + " / 11"; // Title of Plot
             document.getElementById("vis-title").textContent =
                 "United States Defense Spending as % of GDP (1968 - 1980)";
 
@@ -1229,8 +1231,8 @@ function handleClick(event, id) {
         } else if (slide == 7) {
             disable_buttons(2500);
 
-            document.getElementById("current-slide").innerHTML = slide;
-            // Title of Plot
+            document.getElementById("current-slide").innerHTML =
+                slide + " / 11"; // Title of Plot
             document.getElementById("vis-title").textContent =
                 "United States Defense Spending as % of GDP (1981 - 1989)";
 
@@ -1258,8 +1260,8 @@ function handleClick(event, id) {
         } else if (slide == 8) {
             disable_buttons(2500);
 
-            document.getElementById("current-slide").innerHTML = slide;
-            // Title of Plot
+            document.getElementById("current-slide").innerHTML =
+                slide + " / 11"; // Title of Plot
             document.getElementById("vis-title").textContent =
                 "United States Defense Spending as % of GDP (1990 - 2000)";
 
@@ -1284,8 +1286,8 @@ function handleClick(event, id) {
         } else if (slide == 9) {
             disable_buttons(2500);
 
-            document.getElementById("current-slide").innerHTML = slide;
-            // Title of Plot
+            document.getElementById("current-slide").innerHTML =
+                slide + " / 11"; // Title of Plot
             document.getElementById("vis-title").textContent =
                 "United States Defense Spending as % of GDP (2001 - 2008)";
 
@@ -1310,8 +1312,8 @@ function handleClick(event, id) {
         } else if (slide == 10) {
             disable_buttons(2500);
 
-            document.getElementById("current-slide").innerHTML = slide;
-            // Title of Plot
+            document.getElementById("current-slide").innerHTML =
+                slide + " / 11"; // Title of Plot
             document.getElementById("vis-title").textContent =
                 "United States Defense Spending as % of GDP (2009 - 2018)";
 
@@ -1338,8 +1340,8 @@ function handleClick(event, id) {
             disable_buttons(2000, true);
             document.getElementById("next").disabled = true;
 
-            document.getElementById("current-slide").innerHTML = slide;
-
+            document.getElementById("current-slide").innerHTML =
+                slide + " / 11";
             // Title of Plot
             document.getElementById("vis-title").textContent =
                 "United States Defense Spending as % of GDP (1960 - 2018)";
