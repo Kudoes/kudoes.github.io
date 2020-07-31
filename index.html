@@ -23,13 +23,15 @@
                         US Defense Spending
                     </header>
                     <div class="btn-container">
-<<<<<<< HEAD
-                        <button                             id="sources"
-                        class="btn"
-                        onclick="handleClick(this, this.id)">Sources</button>
-=======
-                        <button>Sources</button>
->>>>>>> b817e6c0a8c80afabc41a2f867386de6f79d146c
+                        <div style="width: 20%;">
+                            <button
+                                id="sources"
+                                class="btn"
+                                onclick="handleClick(this, this.id)"
+                            >
+                                Sources
+                            </button>
+                        </div>
                         <div>
                             <button
                                 id="previous"
@@ -50,18 +52,27 @@
                                 Next
                             </button>
                         </div>
-                        <button
-                            id="restart"
-                            class="btn"
-                            onclick="handleClick(this, this.id)"
+                        <div
+                            style="
+                                width: 20%;
+                                display: flex;
+                                justify-content: right;
+                            "
                         >
-                            Restart
-                        </button>
+                            <button
+                                id="restart"
+                                class="btn"
+                                onclick="handleClick(this, this.id)"
+                                style="margin-left: auto;"
+                            >
+                                Restart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
                 <div class="App-body">
-                    <div>
+                    <div id="main-page">
                         <div class="explanation">
                             <h3 id="explanation-title">
                                 United States Defense Spending
@@ -82,7 +93,7 @@
                         </div>
                         <div class="svg1-container">
                             <h3 id="vis-title">
-                                United States Defence Spending vs. Rest of the
+                                United States Defense Spending vs. Rest of the
                                 World (2018)
                             </h3>
                             <svg
@@ -91,10 +102,61 @@
                                 height="500"
                             ></svg>
                         </div>
+                        <footer class="footer-class">
+                            Hover over pie slices/data points for tooltip.
+                        </footer>
                     </div>
-                    <footer class="footer-class">
-                        Hover over pie slices/data points for tooltip.
-                    </footer>
+
+                    <div
+                        class="sources-container explanation"
+                        style="display: none; opacity: 0;"
+                    >
+                        <h2 id="sources-title">
+                            Information
+                        </h2>
+                        <p>
+                            Website is developed by Kashif Khan. Final Project
+                            for CS 498: Data Visualization at UIUC. 2020.
+                        </p>
+                        <hr />
+                        <br />
+                        <h2 id="sources-title">
+                            Data Sources
+                        </h2>
+                        <hr />
+                        <ol style="text-align: left;">
+                            <li>
+                                <b>Total Defense Spending:</b>
+                                https://data.worldbank.org/indicator/MS.MIL.XPND.CD
+                            </li>
+                            <li>
+                                <b>Percentage of GDP Spending:</b>
+                                https://data.worldbank.org/indicator/MS.MIL.XPND.GD.ZS
+                            </li>
+                        </ol>
+                        <br />
+                        <h2 id="sources-title">
+                            Information Sources
+                        </h2>
+                        <hr />
+                        <ol style="text-align: left;">
+                            <li>
+                                https://www.bbc.com/news/world-asia-pacific-16568035
+                            </li>
+                            <li>
+                                https://www.latimes.com/archives/la-xpm-1993-03-27-mn-15800-story.html
+                            </li>
+                            <li>
+                                https://www.americanprogress.org/issues/economy/news/2011/07/06/10041/a-historical-perspective-on-defense-budgets/
+                            </li>
+                            <li>
+                                history.com/topics/vietnam-war/vietnam-war-timeline
+                            </li>
+                            <li>
+                                https://apps.dtic.mil/dtic/tr/fulltext/u2/a238854.pdf
+                            </li>
+                        </ol>
+                    </div>
                 </div>
             </div>
         </div>
