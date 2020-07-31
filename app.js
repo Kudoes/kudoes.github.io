@@ -1207,7 +1207,7 @@ function handleClick(event, id) {
             document.getElementById("current-slide").innerHTML = slide;
             // Title of Plot
             document.getElementById("vis-title").textContent =
-                "United States Defense Spending as % of GDP (1968 - 2018)";
+                "United States Defense Spending as % of GDP (1968 - 1980)";
 
             // Paragraph Title
             document.getElementById("explanation-title").innerHTML =
