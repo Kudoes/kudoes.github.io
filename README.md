@@ -2,4 +2,4 @@
 
 A website with visualizations of US defense spending over the last six decades.
 
-Narrative Visualization Project for CS 498 - Data Visualization at UIUC.
+Narrative Visualization Project for CS 498 - Data Visualization at UIUC. By Kashif Khan.
