@@ -78,8 +78,6 @@ function handleClick(event, id) {
 
             source_or_vis = "vis";
         }
-
-        document.getElementById("next").disabled = false;
     } else {
         if (id == "restart") {
             slide = 1;
@@ -357,7 +355,6 @@ function handleClick(event, id) {
 
             document.getElementById("explanation-text").innerHTML = bodyText;
 
-            //create_gdp_line_chart_7();
             if (id == "next") {
                 create_gdp_line_chart_7();
             } else {
@@ -3002,14 +2999,14 @@ function create_gdp_line_chart_7(reverse = false) {
             if (d.Year.getFullYear() > 2018) {
                 d3.select(this)
                     .transition()
-                    .delay(1250)
+                    .delay(0)
                     .duration(1000)
                     .attr("r", 0)
                     .attr("cy", (d) => y(0));
             } else {
                 d3.select(this)
                     .transition()
-                    .delay(1250)
+                    .delay(0)
                     .duration(1000)
                     .style("opacity", 1)
                     .attr("pointer-events", "none");
@@ -3021,13 +3018,13 @@ function create_gdp_line_chart_7(reverse = false) {
             if (d.Year.getFullYear() > 2018) {
                 d3.select(this)
                     .transition()
-                    .delay(1250)
+                    .delay(0)
                     .duration(1000)
                     .attr("y2", (d) => height - margin.bottom - margin.top);
             } else {
                 d3.select(this)
                     .transition()
-                    .delay(1250)
+                    .delay(0)
                     .duration(1000)
                     .style("opacity", 1);
             }
@@ -3069,7 +3066,7 @@ function create_gdp_line_chart_7(reverse = false) {
             text_lines,
             500,
             "Decrease",
-            1500,
+            500,
             false
         );
     } else {
