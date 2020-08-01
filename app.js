@@ -143,13 +143,13 @@ function handleClick(event, id) {
                 slide + " / 11";
 
             document.getElementById("explanation-title").innerHTML =
-                "Top 5 Countries in Military Expenditure";
+                "Top 5 Countries in Military Expenditure (Excluding US)";
 
             document.getElementById("vis-title").textContent =
                 "Total Defense Spending in Billions USD vs. Year (1993 - 2018)";
 
             let bodyText =
-                "The other top four military-spending countries as of 2018 were China, Saudi Arabia, Russia and India. Notice that China appears to be spending significantly more than the other three as of the last two decades." +
+                "If we exclude the United States for a moment, the other top four military-spending countries as of 2018 were China, Saudi Arabia, Russia and India. Notice that China appears to be spending significantly more than the other three as of the last two decades." +
                 " Note that data from only as far back as 1993 was used in this particular plot because total defense spending data for Russia (historically the United States' main military rival) only became available from 1993 onwards.";
 
             document.getElementById("explanation-text").innerHTML = bodyText;
